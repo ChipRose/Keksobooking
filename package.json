@@ -2,10 +2,10 @@
   "name": "keksobooking",
   "version": "22.0.0",
   "private": true,
-  "description": "Личный проект «{{projectTitle}}» от HTML Academy",
+  "description": "Личный проект «Keksobooking» от HTML Academy",
   "repository": {
     "type": "git",
-    "url": "{{sshUrl}}"
+    "url": "git@github.com:ChipRose/Keksobooking.git"
   },
   "bugs": {
     "url": "{{bugsUrl}}"
