@@ -8,7 +8,7 @@
     "url": "git@github.com:ChipRose/Keksobooking.git"
   },
   "bugs": {
-    "url": "{{bugsUrl}}"
+    "url": "bugsUrl"
   },
   "devDependencies": {
     "browser-sync": "2.26.14",
