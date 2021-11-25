@@ -1,15 +1,15 @@
-'use strict'
-let getCoordinates = function (min, max, accuracy) {
+'use strict';
+let getRandomCoordinates = function (min, max, accuracy) {
   if (min >= 0 && max > 0 && min < max) {
     if (Math.floor(min) === Math.floor(max) && accuracy === 0) {
       return -1;
     }
-    if (accuracy === 0 && min != Math.floor(min)) {
-      min += 1;
-    }
-    return Math.floor((Math.random() * (max * Math.pow(10, accuracy) - min * Math.pow(10, accuracy)) + 1) + min * Math.pow(10, accuracy)) / Math.pow(10, accuracy);
+    let power = Math.pow(10, accuracy);
+    min = Math.ceil(min * power);
+    max = Math.floor(max * power + 1);
+    return Math.floor((Math.random() * (max - min) + min)) / power;
   } else {
     return -1;
   }
-}
-console.log(getCoordinates(2.9, 3.1, 1));
+};
+getRandomCoordinates(3.2, 4.3, 0);
