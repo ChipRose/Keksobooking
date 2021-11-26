@@ -38,5 +38,5 @@ let getRandomFloat = (min, max, accuracy) => {
   return getRandomNumber(min, max, accuracy);
 };
 
-console.log(getRandomInt(4.1, 4));
-console.log(getRandomFloat(3.2, 3.3, 2));
+getRandomInt(4.1, 4);
+getRandomFloat(3.2, 3.3, 2);
