@@ -1,26 +1,33 @@
 'use strict';
 
 let getRandomNumber = (min, max, accuracy) => {
+  min = parseFloat(min);
+  max = parseFloat(max);
+  accuracy = parseInt(accuracy);
+
   if (min < 0 || max < 0 || accuracy < 0) {
-    return -1;
+    throw new TypeError('Все параметры должны быть положительными');
+  }
+
+  if (isNaN(min) || isNaN(max) || isNaN(accuracy)) {
+    throw new TypeError('Все параметры должны быть числами');
+  }
+
+  if (parseInt(min) === parseInt(max) && accuracy === 0) {
+    if (parseInt(min) !== min && parseInt(max) !== max) {
+      throw new TypeError('Невозможно сгенерировать числа удовлетворяющие условию');
+    }
   }
 
   if (min > max) {
     [min, max] = [max, min];
   }
 
-  min = parseFloat(min);
-  max = parseFloat(max);
-  accuracy = parseInt(accuracy);
-
-  if (isNaN(min) || isNaN(max) || isNaN(accuracy)) {
-    return -1;
-  }
-
   let power = Math.pow(10, accuracy);
-  min = Math.floor(min * power);
-  max = Math.floor(max * power + 1);
-  return Math.floor(Math.random() * (max - min) + min) / power;
+  let start = Math.ceil(min * power);
+  let end = Math.floor(max * power) + 1;
+
+  return parseInt((Math.random() * (end - start) + start)) / power;
 };
 
 let getRandomInt = (min, max) => {
@@ -28,14 +35,8 @@ let getRandomInt = (min, max) => {
 };
 
 let getRandomFloat = (min, max, accuracy) => {
-  if (Math.floor(min) === Math.floor(max) && accuracy === 0) {
-    if (Math.floor(min) !== min && Math.floor(max) !== max) {
-      return -1;
-    }
-  }
-
   return getRandomNumber(min, max, accuracy);
 };
 
-getRandomInt(4, 4);
-getRandomFloat(3.2, 3.8, 0);
+console.log(getRandomInt(4.1, 4));
+console.log(getRandomFloat(3.2, 3.3, 2));
