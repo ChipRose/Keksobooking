@@ -24,18 +24,18 @@ let getRandomNumber = (min, max, accuracy) => {
   }
 
   let power = Math.pow(10, accuracy);
-  let start = Math.ceil(min * power);
-  let end = Math.floor(max * power) + 1;
+  let start = Math.ceil(min * power) / power;
+  let end = Math.floor(max * power) / power;
 
-  return parseInt((Math.random() * (end - start) + start)) / power;
+  return (Math.random() * (end - start) + start).toFixed(accuracy);
 };
 
 let getRandomInt = (min, max) => {
-  return getRandomNumber(min, max, 0);
+  return parseInt(getRandomNumber(min, max, 0));
 };
 
 let getRandomFloat = (min, max, accuracy) => {
-  return getRandomNumber(min, max, accuracy);
+  return parseFloat(getRandomNumber(min, max, accuracy));
 };
 
 getRandomInt(4.1, 4);
