@@ -1,6 +1,6 @@
 'use strict';
 
-let getRandomNumber = (min, max, accuracy) => {
+const getRandomNumber = (min, max, accuracy) => {
   min = parseFloat(min);
   max = parseFloat(max);
   accuracy = parseInt(accuracy);
@@ -23,18 +23,18 @@ let getRandomNumber = (min, max, accuracy) => {
     [min, max] = [max, min];
   }
 
-  let power = Math.pow(10, accuracy);
-  let start = Math.ceil(min * power) / power;
-  let end = Math.floor(max * power) / power;
+  const power = Math.pow(10, accuracy);
+  const start = Math.ceil(min * power) / power;
+  const end = Math.floor(max * power) / power;
 
   return (Math.random() * (end - start) + start).toFixed(accuracy);
 };
 
-let getRandomInt = (min, max) => {
+const getRandomInt = (min, max) => {
   return parseInt(getRandomNumber(min, max, 0));
 };
 
-let getRandomFloat = (min, max, accuracy) => {
+const getRandomFloat = (min, max, accuracy) => {
   return parseFloat(getRandomNumber(min, max, accuracy));
 };
 
