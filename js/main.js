@@ -38,5 +38,50 @@ const getRandomFloat = (min, max, accuracy) => {
   return parseFloat(getRandomNumber(min, max, accuracy));
 };
 
-getRandomInt(4.1, 4);
-getRandomFloat(3.2, 3.3, 2);
+const OBJECT_TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungallow',
+];
+
+const TIMES_TO_CHECK = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+
+const createAuthor =() => {
+  return {
+    avatar: 'img/avatars/user{{xx}}.png', //??
+  }
+}
+
+const createOffer = () => {
+  return {
+    title: '', //??
+    address: '', //??
+    price: getRandomInt(0, 1000),
+    type: OBJECT_TYPES[getRandomInt(0, OBJECT_TYPES.length-1)],
+    rooms: getRandomInt(1, 20),
+    guests: getRandomInt(1, 100),
+    checkin: TIMES_TO_CHECK[getRandomInt(0, TIMES_TO_CHECK.length-1)],
+    checkout: TIMES_TO_CHECK[getRandomInt(0, TIMES_TO_CHECK.length-1)],
+    features: [], //??
+    description: '',
+    photos: [], //??
+    location: {
+      x: getRandomFloat(35.65, 35.7, 4),
+      y: getRandomFloat(139.7, 139.8, 4),
+    },
+  };
+}
