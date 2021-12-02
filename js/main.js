@@ -60,28 +60,70 @@ const FEATURES = [
   'conditioner',
 ];
 
-const createAuthor =() => {
+const PHOTOS_LOCATIONS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+]
+
+const getRandomVariousIndexArray = (quantity) => {
+  let count = 1;
+  let VariousNumbers = new Array(1).fill(null).map(() => getRandomInt(0, quantity));
+  while (count < quantity) {
+    let variousNumber = getRandomInt(0, quantity);
+    if (VariousNumbers.every((element) => element !== variousNumber)) {
+      VariousNumbers.push(variousNumber);
+      count++;
+    }
+  }
+  return VariousNumbers;
+}
+
+const getRandomArray = (arrayElements, quantity) => {
+  const RandomArray = new Array();
+  const IndexArray = getRandomVariousIndexArray(quantity);
+  for (let i = 0; i < quantity; i++) {
+    RandomArray.push(arrayElements[IndexArray[i]]);
+  }
+  return RandomArray;
+};
+
+const getRandomElement = (elements) => {
+  return elements[getRandomInt(0, elements.length - 1)];
+};
+
+
+const createAuthor = () => {
   return {
     avatar: 'img/avatars/user{{xx}}.png', //??
   }
-}
+};
+
+const MAX_ROOMS_QUANTITY = 10;
+const MAX_GUESTS_QUANTITY = 20;
+const MAX_PRICE = 1000;
 
 const createOffer = () => {
   return {
-    title: '', //??
-    address: '', //??
-    price: getRandomInt(0, 1000),
-    type: OBJECT_TYPES[getRandomInt(0, OBJECT_TYPES.length-1)],
-    rooms: getRandomInt(1, 20),
-    guests: getRandomInt(1, 100),
-    checkin: TIMES_TO_CHECK[getRandomInt(0, TIMES_TO_CHECK.length-1)],
-    checkout: TIMES_TO_CHECK[getRandomInt(0, TIMES_TO_CHECK.length-1)],
-    features: [], //??
-    description: '',
-    photos: [], //??
-    location: {
-      x: getRandomFloat(35.65, 35.7, 4),
-      y: getRandomFloat(139.7, 139.8, 4),
-    },
+    title: 'Сдам', //??
+    address: '', //из географических координат по маске {{location.x}}, {{location.y}}
+    price: getRandomInt(0, MAX_PRICE),
+    type: getRandomElement(OBJECT_TYPES),
+    rooms: getRandomInt(1, MAX_ROOMS_QUANTITY),
+    guests: getRandomInt(1, MAX_GUESTS_QUANTITY),
+    checkin: getRandomElement(TIMES_TO_CHECK),
+    checkout: getRandomElement(TIMES_TO_CHECK),
+    features: getRandomArray(FEATURES, getRandomInt(1, FEATURES.length)),
+    description: '', // описание помещения. Придумайте самостоятельно.
+    photos: [], //массив строк — массив случайной длины из значений
   };
 }
+
+const createLocation = () => {
+  return {
+    x: getRandomFloat(35.65, 35.7, 4),
+    y: getRandomFloat(139.7, 139.8, 4),
+  }
+};
+
+console.log(createOffer());
