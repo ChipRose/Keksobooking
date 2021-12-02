@@ -65,28 +65,36 @@ const PHOTOS_LOCATIONS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ]
+const checkUniqueNumber = (array, number) => {
+  return array.every((element) => element !== number);
+}
 
-const getRandomVariousIndexArray = (quantity) => {
-  let count = 1;
-  let VariousNumbers = new Array(1).fill(null).map(() => getRandomInt(0, quantity));
-  while (count < quantity) {
-    let variousNumber = getRandomInt(0, quantity);
-    if (VariousNumbers.every((element) => element !== variousNumber)) {
-      VariousNumbers.push(variousNumber);
+const getRandomVariousIndexArray = (maxValue, size) => {
+  let count = 0;
+  let variousNumber = 0;
+  let VariousNumbers = new Array(size).fill(null);
+  while (count < size) {
+    variousNumber = getRandomInt(0, maxValue);
+    if (checkUniqueNumber(VariousNumbers, variousNumber)) {
+      VariousNumbers[count] = variousNumber;
       count++;
     }
   }
   return VariousNumbers;
 }
 
-const getRandomArray = (arrayElements, quantity) => {
-  const RandomArray = new Array();
-  const IndexArray = getRandomVariousIndexArray(quantity);
-  for (let i = 0; i < quantity; i++) {
-    RandomArray.push(arrayElements[IndexArray[i]]);
+console.log('Индексы ' + getRandomVariousIndexArray((FEATURES.length - 1), getRandomInt(1, FEATURES.length - 1)));
+
+const getRandomArray = (arrayElements, size) => {
+  const RandomArray = new Array(size).fill(null);
+  const IndexArray = getRandomVariousIndexArray(arrayElements.length - 1, size);
+  for (let i = 0; i < size; i++) {
+    RandomArray[i] = arrayElements[IndexArray[i]];
   }
   return RandomArray;
 };
+
+console.log('Произвольное количество элементов ' + getRandomArray(FEATURES,  getRandomInt(1, FEATURES.length - 1)));
 
 const getRandomElement = (elements) => {
   return elements[getRandomInt(0, elements.length - 1)];
