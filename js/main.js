@@ -1,5 +1,48 @@
 'use strict';
 
+const RoomsQuantity = {
+  min: 1,
+  max: 20,
+};
+
+const GuestsQuantity = {
+  min: 1,
+  max: 20,
+};
+
+const Price = {
+  min: 2000,
+  max: 5000,
+};
+
+const OBJECT_TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungallow',
+];
+
+const TIMES_TO_CHECK = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+
+const PHOTOS_LOCATIONS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+]
+
 const getRandomNumber = (min, max, accuracy) => {
   min = parseFloat(min);
   max = parseFloat(max);
@@ -38,63 +81,36 @@ const getRandomFloat = (min, max, accuracy) => {
   return parseFloat(getRandomNumber(min, max, accuracy));
 };
 
-const OBJECT_TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungallow',
-];
-
-const TIMES_TO_CHECK = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-
-const FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner',
-];
-
-const PHOTOS_LOCATIONS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
-]
 const checkUniqueNumber = (array, number) => {
   return array.every((element) => element !== number);
 }
 
 const getRandomVariousIndexArray = (maxValue, size) => {
-  let count = 0;
-  let variousNumber = 0;
-  let VariousNumbers = new Array(size).fill(null);
-  while (count < size) {
-    variousNumber = getRandomInt(0, maxValue);
-    if (checkUniqueNumber(VariousNumbers, variousNumber)) {
-      VariousNumbers[count] = variousNumber;
-      count++;
+  let randomNumber = 0;
+  let VariousNumbers = new Array(size).fill(null).map((element, VariousNumbers) => {
+    while (element === null) {
+      randomNumber = getRandomInt(0, maxValue);
+      if (checkUniqueNumber(VariousNumbers, randomNumber)) {
+        element = randomNumber;
+      }
+      return element;
     }
-  }
+  });
   return VariousNumbers;
-}
-
-console.log('Индексы ' + getRandomVariousIndexArray((FEATURES.length - 1), getRandomInt(1, FEATURES.length - 1)));
-
-const getRandomArray = (arrayElements, size) => {
-  const RandomArray = new Array(size).fill(null);
-  const IndexArray = getRandomVariousIndexArray(arrayElements.length - 1, size);
-  for (let i = 0; i < size; i++) {
-    RandomArray[i] = arrayElements[IndexArray[i]];
-  }
-  return RandomArray;
 };
 
-console.log('Произвольное количество элементов ' + getRandomArray(FEATURES,  getRandomInt(1, FEATURES.length - 1)));
+
+console.log('Случайные числа ' + getRandomVariousIndexArray(4, 3));
+
+const getRandomVariousLengthArray = (arrayElements, size) => {
+  const IndexArray = getRandomVariousIndexArray(arrayElements.length - 1, size);
+  let i = -1;
+  const RandomArray = new Array(size).fill(null).map(() => {
+    i++;
+    return arrayElements[IndexArray[i]];
+  });
+  return RandomArray;
+};
 
 const getRandomElement = (elements) => {
   return elements[getRandomInt(0, elements.length - 1)];
@@ -107,23 +123,19 @@ const createAuthor = () => {
   }
 };
 
-const MAX_ROOMS_QUANTITY = 10;
-const MAX_GUESTS_QUANTITY = 20;
-const MAX_PRICE = 1000;
-
 const createOffer = () => {
   return {
     title: 'Сдам', //??
     address: '', //из географических координат по маске {{location.x}}, {{location.y}}
-    price: getRandomInt(0, MAX_PRICE),
+    price: getRandomInt(Price.min, Price.max),
     type: getRandomElement(OBJECT_TYPES),
-    rooms: getRandomInt(1, MAX_ROOMS_QUANTITY),
-    guests: getRandomInt(1, MAX_GUESTS_QUANTITY),
+    rooms: getRandomInt(RoomsQuantity.min, RoomsQuantity.max),
+    guests: getRandomInt(GuestsQuantity.min, GuestsQuantity.max),
     checkin: getRandomElement(TIMES_TO_CHECK),
     checkout: getRandomElement(TIMES_TO_CHECK),
-    features: getRandomArray(FEATURES, getRandomInt(1, FEATURES.length)),
+    features: getRandomVariousLengthArray(FEATURES, getRandomInt(1, FEATURES.length)),
     description: '', // описание помещения. Придумайте самостоятельно.
-    photos: [], //массив строк — массив случайной длины из значений
+    photos: getRandomVariousLengthArray(PHOTOS_LOCATIONS, getRandomInt(1, PHOTOS_LOCATIONS.length)),
   };
 }
 
