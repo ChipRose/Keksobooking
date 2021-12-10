@@ -45,7 +45,7 @@ const FEATURES = [
   'conditioner',
 ];
 
-const PHOTOS_LOCATIONS = [
+const PHOTO_SOURCES = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
@@ -93,24 +93,24 @@ const checkUniqueNumber = (array, number) => {
   return array.every((element) => element !== number);
 }
 
-const getRandomVariousIndexArray = (minValue, maxValue, size) => {
+const getRandomVariousIndexArray = (min, max, size) => {
   let randomNumber;
-  let RandomIndexes = new Array();
-  while (RandomIndexes.length < size) {
-    randomNumber = getRandomInt(minValue, maxValue);
-    if (checkUniqueNumber(RandomIndexes, randomNumber)) {
-      RandomIndexes.push(randomNumber);
+  let randomIndexes = [];
+  while (randomIndexes.length < size) {
+    randomNumber = getRandomInt(min, max);
+    if (checkUniqueNumber(randomIndexes, randomNumber)) {
+      randomIndexes.push(randomNumber);
     }
   }
-  return RandomIndexes;
+  return randomIndexes;
 }
 
 const getRandomVariousLengthArray = (arrayElements, size) => {
-  const IndexArray = getRandomVariousIndexArray(0, arrayElements.length - 1, size);
-  const RandomArray = IndexArray.map((index) => {
+  const indexArray = getRandomVariousIndexArray(0, arrayElements.length - 1, size);
+  const randomArray = indexArray.map((index) => {
     return arrayElements[index];
   });
-  return RandomArray;
+  return randomArray;
 };
 
 const getRandomElement = (elements) => {
@@ -142,7 +142,7 @@ const createOffer = () => {
     checkout: getRandomElement(TIMES_TO_CHECK_OUT),
     features: getRandomVariousLengthArray(FEATURES, getRandomInt(1, FEATURES.length)),
     description: 'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
-    photos: getRandomVariousLengthArray(PHOTOS_LOCATIONS, getRandomInt(1, PHOTOS_LOCATIONS.length)),
+    photos: getRandomVariousLengthArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
   };
 }
 
@@ -156,6 +156,6 @@ const createPromo = (person, content, address) => {
   }
 }
 
-const promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), LOCATION));
+const Promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), LOCATION));
 
-promos;
+Promos;
