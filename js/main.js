@@ -158,4 +158,4 @@ const createPromo = (person, content, address) => {
 
 const promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), LOCATION));
 
-console.log(promos);
+promos;
