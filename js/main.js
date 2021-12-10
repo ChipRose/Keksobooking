@@ -1,18 +1,20 @@
 'use strict';
 
-const RoomsQuantity = {
-  min: 1,
-  max: 20,
+const PROMO_QUANTITY = 10;
+
+const Rooms = {
+  MIN: 1,
+  MAX: 20,
 };
 
-const GuestsQuantity = {
-  min: 1,
-  max: 20,
+const Guests = {
+  MIN: 1,
+  MAX: 20,
 };
 
-const Price = {
-  min: 2000,
-  max: 5000,
+const Prices = {
+  MIN: 2000,
+  MAX: 5000,
 };
 
 const OBJECT_TYPES = [
@@ -22,7 +24,13 @@ const OBJECT_TYPES = [
   'bungallow',
 ];
 
-const TIMES_TO_CHECK = [
+const TIMES_TO_CHECK_IN = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const TIMES_TO_CHECK_OUT = [
   '12:00',
   '13:00',
   '14:00',
@@ -85,29 +93,22 @@ const checkUniqueNumber = (array, number) => {
   return array.every((element) => element !== number);
 }
 
-const getRandomVariousIndexArray = (maxValue, size) => {
-  let randomNumber = 0;
-  let VariousNumbers = new Array(size).fill(null).map((element, VariousNumbers) => {
-    while (element === null) {
-      randomNumber = getRandomInt(0, maxValue);
-      if (checkUniqueNumber(VariousNumbers, randomNumber)) {
-        element = randomNumber;
-      }
-      return element;
+const getRandomVariousIndexArray = (minValue, maxValue, size) => {
+  let randomNumber;
+  let RandomIndexes = new Array();
+  while (RandomIndexes.length < size) {
+    randomNumber = getRandomInt(minValue, maxValue);
+    if (checkUniqueNumber(RandomIndexes, randomNumber)) {
+      RandomIndexes.push(randomNumber);
     }
-  });
-  return VariousNumbers;
-};
-
-
-console.log('Случайные числа ' + getRandomVariousIndexArray(4, 3));
+  }
+  return RandomIndexes;
+}
 
 const getRandomVariousLengthArray = (arrayElements, size) => {
-  const IndexArray = getRandomVariousIndexArray(arrayElements.length - 1, size);
-  let i = -1;
-  const RandomArray = new Array(size).fill(null).map(() => {
-    i++;
-    return arrayElements[IndexArray[i]];
+  const IndexArray = getRandomVariousIndexArray(0, arrayElements.length - 1, size);
+  const RandomArray = IndexArray.map((index) => {
+    return arrayElements[index];
   });
   return RandomArray;
 };
@@ -116,34 +117,45 @@ const getRandomElement = (elements) => {
   return elements[getRandomInt(0, elements.length - 1)];
 };
 
-
-const createAuthor = () => {
+const createAuthor = (index, necessaryNameLength) => {
+  const nullsQuantity = necessaryNameLength - String(index).length;
+  let photoIndex = (String(Math.pow(10, nullsQuantity)) + index).slice(-necessaryNameLength);
   return {
-    avatar: 'img/avatars/user{{xx}}.png', //??
+    avatar: 'img/avatars/user' + photoIndex + '.png',
   }
+};
+
+const LOCATION = {
+  X: getRandomFloat(35.65, 35.7, 4),
+  Y: getRandomFloat(139.7, 139.8, 4),
 };
 
 const createOffer = () => {
   return {
-    title: 'Сдам', //??
-    address: '', //из географических координат по маске {{location.x}}, {{location.y}}
-    price: getRandomInt(Price.min, Price.max),
+    title: 'Сдам',
+    address: LOCATION.X + ', ' + LOCATION.Y,
+    price: getRandomInt(Prices.MIN, Prices.MAX),
     type: getRandomElement(OBJECT_TYPES),
-    rooms: getRandomInt(RoomsQuantity.min, RoomsQuantity.max),
-    guests: getRandomInt(GuestsQuantity.min, GuestsQuantity.max),
-    checkin: getRandomElement(TIMES_TO_CHECK),
-    checkout: getRandomElement(TIMES_TO_CHECK),
+    rooms: getRandomInt(Rooms.MIN, Rooms.MAX),
+    guests: getRandomInt(Guests.MIN, Guests.MAX),
+    checkin: getRandomElement(TIMES_TO_CHECK_IN),
+    checkout: getRandomElement(TIMES_TO_CHECK_OUT),
     features: getRandomVariousLengthArray(FEATURES, getRandomInt(1, FEATURES.length)),
-    description: '', // описание помещения. Придумайте самостоятельно.
+    description: 'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
     photos: getRandomVariousLengthArray(PHOTOS_LOCATIONS, getRandomInt(1, PHOTOS_LOCATIONS.length)),
   };
 }
 
-const createLocation = () => {
-  return {
-    x: getRandomFloat(35.65, 35.7, 4),
-    y: getRandomFloat(139.7, 139.8, 4),
-  }
-};
+const authors = getRandomVariousIndexArray(1, PROMO_QUANTITY, 10).map((index) => createAuthor(index, 2));
 
-console.log(createOffer());
+const createPromo = (person, content, address) => {
+  return {
+    author: person,
+    offer: content,
+    location: address,
+  }
+}
+
+const promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), LOCATION));
+
+console.log(promos);
