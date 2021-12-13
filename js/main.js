@@ -1,5 +1,56 @@
 'use strict';
 
+const PROMO_QUANTITY = 10;
+
+const Rooms = {
+  MIN: 1,
+  MAX: 20,
+};
+
+const Guests = {
+  MIN: 1,
+  MAX: 20,
+};
+
+const Prices = {
+  MIN: 2000,
+  MAX: 5000,
+};
+
+const OBJECT_TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungallow',
+];
+
+const TIMES_TO_CHECK_IN = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const TIMES_TO_CHECK_OUT = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+
+const PHOTO_SOURCES = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+]
+
 const getRandomNumber = (min, max, accuracy) => {
   min = parseFloat(min);
   max = parseFloat(max);
@@ -38,50 +89,73 @@ const getRandomFloat = (min, max, accuracy) => {
   return parseFloat(getRandomNumber(min, max, accuracy));
 };
 
-const OBJECT_TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungallow',
-];
-
-const TIMES_TO_CHECK = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-
-const FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner',
-];
-
-const createAuthor =() => {
-  return {
-    avatar: 'img/avatars/user{{xx}}.png', //??
-  }
+const checkUniqueNumber = (array, number) => {
+  return array.every((element) => element !== number);
 }
+
+const getRandomVariousIndexArray = (min, max, size) => {
+  let randomNumber;
+  let randomIndexes = [];
+  while (randomIndexes.length < size) {
+    randomNumber = getRandomInt(min, max);
+    if (checkUniqueNumber(randomIndexes, randomNumber)) {
+      randomIndexes.push(randomNumber);
+    }
+  }
+  return randomIndexes;
+}
+
+const getRandomVariousLengthArray = (arrayElements, size) => {
+  const indexArray = getRandomVariousIndexArray(0, arrayElements.length - 1, size);
+  const randomArray = indexArray.map((index) => {
+    return arrayElements[index];
+  });
+  return randomArray;
+};
+
+const getRandomElement = (elements) => {
+  return elements[getRandomInt(0, elements.length - 1)];
+};
+
+const createAuthor = (index, necessaryNameLength) => {
+  const nullsQuantity = new Array(necessaryNameLength - String(index).length).fill('0');
+  let photoIndex = nullsQuantity.join()+index;
+  return {
+    avatar: `img/avatars/user${photoIndex}.png`,
+  }
+};
+
+const Location = {
+  x: getRandomFloat(35.65, 35.7, 4),
+  y: getRandomFloat(139.7, 139.8, 4),
+};
 
 const createOffer = () => {
   return {
-    title: '', //??
-    address: '', //??
-    price: getRandomInt(0, 1000),
-    type: OBJECT_TYPES[getRandomInt(0, OBJECT_TYPES.length-1)],
-    rooms: getRandomInt(1, 20),
-    guests: getRandomInt(1, 100),
-    checkin: TIMES_TO_CHECK[getRandomInt(0, TIMES_TO_CHECK.length-1)],
-    checkout: TIMES_TO_CHECK[getRandomInt(0, TIMES_TO_CHECK.length-1)],
-    features: [], //??
-    description: '',
-    photos: [], //??
-    location: {
-      x: getRandomFloat(35.65, 35.7, 4),
-      y: getRandomFloat(139.7, 139.8, 4),
-    },
+    title: 'Сдам',
+    address: Location.x + ', ' + Location.y,
+    price: getRandomInt(Prices.MIN, Prices.MAX),
+    type: getRandomElement(OBJECT_TYPES),
+    rooms: getRandomInt(Rooms.MIN, Rooms.MAX),
+    guests: getRandomInt(Guests.MIN, Guests.MAX),
+    checkin: getRandomElement(TIMES_TO_CHECK_IN),
+    checkout: getRandomElement(TIMES_TO_CHECK_OUT),
+    features: getRandomVariousLengthArray(FEATURES, getRandomInt(1, FEATURES.length)),
+    description: 'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
+    photos: getRandomVariousLengthArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
   };
 }
+
+const authors = getRandomVariousIndexArray(1, PROMO_QUANTITY, 10).map((index) => createAuthor(index, 2));
+
+const createPromo = (person, content, address) => {
+  return {
+    author: person,
+    offer: content,
+    location: address,
+  }
+}
+
+const Promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), Location));
+
+Promos;
