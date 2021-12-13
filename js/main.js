@@ -118,22 +118,22 @@ const getRandomElement = (elements) => {
 };
 
 const createAuthor = (index, necessaryNameLength) => {
-  const nullsQuantity = necessaryNameLength - String(index).length;
-  let photoIndex = (String(Math.pow(10, nullsQuantity)) + index).slice(-necessaryNameLength);
+  const nullsQuantity = new Array(necessaryNameLength - String(index).length).fill('0');
+  let photoIndex = nullsQuantity.join()+index;
   return {
-    avatar: 'img/avatars/user' + photoIndex + '.png',
+    avatar: `img/avatars/user${photoIndex}.png`,
   }
 };
 
-const LOCATION = {
-  X: getRandomFloat(35.65, 35.7, 4),
-  Y: getRandomFloat(139.7, 139.8, 4),
+const Location = {
+  x: getRandomFloat(35.65, 35.7, 4),
+  y: getRandomFloat(139.7, 139.8, 4),
 };
 
 const createOffer = () => {
   return {
     title: 'Сдам',
-    address: LOCATION.X + ', ' + LOCATION.Y,
+    address: Location.x + ', ' + Location.y,
     price: getRandomInt(Prices.MIN, Prices.MAX),
     type: getRandomElement(OBJECT_TYPES),
     rooms: getRandomInt(Rooms.MIN, Rooms.MAX),
@@ -156,6 +156,6 @@ const createPromo = (person, content, address) => {
   }
 }
 
-const Promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), LOCATION));
+const Promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => element = createPromo(authors[index], createOffer(), Location));
 
 Promos;
