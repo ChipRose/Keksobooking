@@ -6,7 +6,7 @@ const getRandomElement = (elements) => {
 
 const checkUniqueNumber = (array, number) => {
   return array.every((element) => element !== number);
-}
+};
 
 const getRandomArrayOfVariousIndex = (min, max, size) => {
   let randomNumber;
@@ -15,10 +15,10 @@ const getRandomArrayOfVariousIndex = (min, max, size) => {
     randomNumber = getRandomInt(min, max);
     if (checkUniqueNumber(randomIndexes, randomNumber)) {
       randomIndexes.push(randomNumber);
-    }
-  }
+    };
+  };
   return randomIndexes;
-}
+};
 
 const getRandomArray = (arrayElements, size) => {
   const indexArray = getRandomArrayOfVariousIndex(0, arrayElements.length - 1, size);

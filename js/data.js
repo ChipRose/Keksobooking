@@ -28,7 +28,7 @@ const Coordinates = {
     MAX: 139.8,
   },
   ACCURACY: 4,
-}
+};
 
 const OBJECT_TYPES = [
   'palace',
@@ -62,7 +62,7 @@ const PHOTO_SOURCES = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
-]
+];
 
 
 const createAuthor = (index, necessaryNameLength) => {
@@ -70,7 +70,7 @@ const createAuthor = (index, necessaryNameLength) => {
   let photoIndex = nullsQuantity.join() + index;
   return {
     avatar: `img/avatars/user${photoIndex}.png`,
-  }
+  };
 };
 
 const authors = getRandomArrayOfVariousIndex(1, PROMO_QUANTITY, PROMO_QUANTITY).map((index) => createAuthor(index, 2));
@@ -79,7 +79,7 @@ const createLocation = (xMin = Coordinates.X.MIN, xMax = Coordinates.X.MAX, yMin
   return {
     x: getRandomFloat(xMin, xMax, accuracy),
     y: getRandomFloat(yMin, yMax, accuracy),
-  }
+  };
 };
 
 const createOffer = (coordinateX, coordinateY) => {
@@ -96,15 +96,15 @@ const createOffer = (coordinateX, coordinateY) => {
     description: 'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
     photos: getRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
   };
-}
+};
 
 const createPromo = (person, content, address) => {
   return {
     author: person,
     offer: content,
     location: address,
-  }
-}
+  };
+};
 
 const Promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => {
   const location = createLocation();
