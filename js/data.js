@@ -73,15 +73,14 @@ const createAuthor = (index, necessaryNameLength) => {
   }
 };
 
+const authors = getRandomArrayOfVariousIndex(1, PROMO_QUANTITY, PROMO_QUANTITY).map((index) => createAuthor(index, 2));
+
 const createLocation = (xMin = Coordinates.X.MIN, xMax = Coordinates.X.MAX, yMin = Coordinates.Y.MIN, yMax = Coordinates.Y.MAX, accuracy = Coordinates.ACCURACY) => {
   return {
     x: getRandomFloat(xMin, xMax, accuracy),
     y: getRandomFloat(yMin, yMax, accuracy),
   }
 };
-
-const authors = getRandomArrayOfVariousIndex(1, PROMO_QUANTITY, PROMO_QUANTITY).map((index) => createAuthor(index, 2));
-
 
 const createOffer = (coordinateX, coordinateY) => {
   return {
@@ -98,7 +97,6 @@ const createOffer = (coordinateX, coordinateY) => {
     photos: getRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
   };
 }
-
 
 const createPromo = (person, content, address) => {
   return {
