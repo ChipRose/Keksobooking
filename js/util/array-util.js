@@ -4,28 +4,30 @@ const getRandomElement = (elements) => {
   return elements[getRandomInt(0, elements.length - 1)];
 };
 
-const checkUniqueNumber = (array, number) => {
-  return array.every((element) => element !== number);
-};
+const getUniqueIndex = (min, max) => {
+  const randomIndexes = [];
 
-const getRandomArrayOfVariousIndex = (min, max, size) => {
-  let randomNumber;
-  let randomIndexes = [];
-  while (randomIndexes.length < size) {
-    randomNumber = getRandomInt(min, max);
-    if (checkUniqueNumber(randomIndexes, randomNumber)) {
-      randomIndexes.push(randomNumber);
+  return () => {
+    let randomIndex = getRandomInt(min, max);
+    if (randomIndexes.length >= max - min + 1) {
+      throw new TypeError('Разные числа не могут быть сформированы в текущем диапазоне');
     };
-  };
-  return randomIndexes;
+
+    while (randomIndexes.includes(randomIndex)) {
+      randomIndex = getRandomInt(min, max);
+    };
+
+    randomIndexes.push(randomIndex);
+    return randomIndex;
+  }
 };
 
-const getRandomArray = (arrayElements, size) => {
-  const indexArray = getRandomArrayOfVariousIndex(0, arrayElements.length - 1, size);
-  const randomArray = indexArray.map((index) => {
-    return arrayElements[index];
+const getVariousLengthRandomArray = (arrayElements, size) => {
+  const getUniqueRandomInteger = getUniqueIndex(0, arrayElements.length - 1);
+  const randomArray = new Array(size).fill(null).map(() => {
+    return arrayElements[getUniqueRandomInteger()];
   });
   return randomArray;
 };
 
-export { getRandomElement, getRandomArrayOfVariousIndex, getRandomArray };
+export { getRandomElement, getUniqueIndex, getVariousLengthRandomArray };

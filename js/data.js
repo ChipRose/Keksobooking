@@ -1,5 +1,5 @@
 import { getRandomInt, getRandomFloat } from './util/math-util.js';
-import { getRandomElement, getRandomArrayOfVariousIndex, getRandomArray } from './util/array-util.js';
+import { getRandomElement, getUniqueIndex, getVariousLengthRandomArray } from './util/array-util.js';
 
 const PROMO_QUANTITY = 10;
 
@@ -29,6 +29,13 @@ const Coordinates = {
   },
   ACCURACY: 4,
 };
+
+const TITLES = [
+  'Сдаю',
+  'Продаю',
+  'Сдаю апартаменты',
+  'Аренда',
+];
 
 const OBJECT_TYPES = [
   'palace',
@@ -64,16 +71,13 @@ const PHOTO_SOURCES = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 
-
-const createAuthor = (index, necessaryNameLength) => {
-  const nullsQuantity = new Array(necessaryNameLength - String(index).length).fill('0');
-  let photoIndex = nullsQuantity.join() + index;
+const createAuthor = (photoIndex) => {
+  const necessaryNameLength = String(PROMO_QUANTITY).length;
+  const photoName = new Array(necessaryNameLength - String(photoIndex).length).fill('0').join() + photoIndex;
   return {
-    avatar: `img/avatars/user${photoIndex}.png`,
+    author: `img/avatars/user${photoName}.png`,
   };
-};
-
-const authors = getRandomArrayOfVariousIndex(1, PROMO_QUANTITY, PROMO_QUANTITY).map((index) => createAuthor(index, 2));
+}
 
 const createLocation = (xMin = Coordinates.X.MIN, xMax = Coordinates.X.MAX, yMin = Coordinates.Y.MIN, yMax = Coordinates.Y.MAX, accuracy = Coordinates.ACCURACY) => {
   return {
@@ -84,7 +88,7 @@ const createLocation = (xMin = Coordinates.X.MIN, xMax = Coordinates.X.MAX, yMin
 
 const createOffer = (coordinateX, coordinateY) => {
   return {
-    title: 'Сдам',
+    title: getRandomElement(TITLES),
     address: `${coordinateX}, ${coordinateY}`,
     price: getRandomInt(Prices.MIN, Prices.MAX),
     type: getRandomElement(OBJECT_TYPES),
@@ -92,23 +96,21 @@ const createOffer = (coordinateX, coordinateY) => {
     guests: getRandomInt(Guests.MIN, Guests.MAX),
     checkin: getRandomElement(TIMES_TO_CHECK_IN),
     checkout: getRandomElement(TIMES_TO_CHECK_OUT),
-    features: getRandomArray(FEATURES, getRandomInt(1, FEATURES.length)),
+    features: getVariousLengthRandomArray(FEATURES, getRandomInt(1, FEATURES.length)),
     description: 'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
-    photos: getRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
+    photos: getVariousLengthRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
   };
 };
 
-const createPromo = (person, content, address) => {
-  return {
-    author: person,
-    offer: content,
-    location: address,
-  };
-};
+const createPromos = () => {
+  const getIndex = getUniqueIndex(1, PROMO_QUANTITY);
+  const Promos = new Array(PROMO_QUANTITY).fill(null).map(() => {
+    const getLocation = createLocation();
+    return Object.assign({}, createAuthor(getIndex()), createOffer(getLocation.x, getLocation.y), getLocation);
+  });
+  return Promos;
+}
 
-const Promos = new Array(PROMO_QUANTITY).fill(null).map((element, index) => {
-  const location = createLocation();
-  return element = createPromo(authors[index], createOffer(location.x, location.y), location);
-});
+console.log(createPromos());
 
-export {Promos};
+export { createPromos };
