@@ -5,21 +5,21 @@ const getRandomNumber = (min, max, accuracy) => {
 
   if (min < 0 || max < 0 || accuracy < 0) {
     throw new TypeError('Все параметры должны быть положительными');
-  };
+  }
 
   if (isNaN(min) || isNaN(max) || isNaN(accuracy)) {
     throw new TypeError('Все параметры должны быть числами');
-  };
+  }
 
   if (parseInt(min) === parseInt(max) && accuracy === 0) {
     if (parseInt(min) !== min && parseInt(max) !== max) {
       throw new TypeError('Невозможно сгенерировать числа удовлетворяющие условию');
-    };
-  };
+    }
+  }
 
   if (min > max) {
     [min, max] = [max, min];
-  };
+  }
 
   const power = Math.pow(10, accuracy);
   const start = Math.ceil(min * power) / power;

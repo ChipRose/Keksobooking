@@ -11,11 +11,11 @@ const getUniqueIndex = (min, max) => {
     let randomIndex = getRandomInt(min, max);
     if (randomIndexes.length >= max - min + 1) {
       throw new TypeError('Разные числа не могут быть сформированы в текущем диапазоне');
-    };
+    }
 
     while (randomIndexes.includes(randomIndex)) {
       randomIndex = getRandomInt(min, max);
-    };
+    }
 
     randomIndexes.push(randomIndex);
     return randomIndex;
