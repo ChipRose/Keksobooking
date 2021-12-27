@@ -41,7 +41,7 @@ const OBJECT_TYPES = [
   'palace',
   'flat',
   'house',
-  'bungallow',
+  'bungalow',
 ];
 
 const TIMES_TO_CHECK_IN = [
@@ -75,7 +75,9 @@ const createAuthor = (photoIndex) => {
   const necessaryNameLength = String(PROMO_QUANTITY).length;
   const nessesaryNulls = new Array(necessaryNameLength - String(photoIndex).length).fill('0');
   const photoName = nessesaryNulls.join() + photoIndex;
-  return `img/avatars/user${photoName}.png`;
+  return {
+    avatar: `img/avatars/user${photoName}.png`,
+  };
 }
 
 const createLocation = (xMin = Coordinates.X.MIN, xMax = Coordinates.X.MAX, yMin = Coordinates.Y.MIN, yMax = Coordinates.Y.MAX, accuracy = Coordinates.ACCURACY) => {
@@ -103,11 +105,11 @@ const createOffer = (coordinateX, coordinateY) => {
 
 const createPromos = () => {
   const getIndex = getUniqueIndex(1, PROMO_QUANTITY);
-  const Promos = new Array(PROMO_QUANTITY).fill(null).map(() => {
+  const promos = new Array(PROMO_QUANTITY).fill(null).map(() => {
     const getLocation = createLocation();
     return Object.assign({}, { author: createAuthor(getIndex()) }, { offer: createOffer(getLocation.x, getLocation.y) }, { location: getLocation });
   });
-  return Promos;
+  return promos;
 }
 
 export { createPromos };
