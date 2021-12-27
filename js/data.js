@@ -76,7 +76,7 @@ const createAuthor = (photoIndex) => {
   const nessesaryNulls = new Array(necessaryNameLength - String(photoIndex).length).fill('0');
   const photoName = nessesaryNulls.join() + photoIndex;
   return {
-    avatar: `img/avatars/user${photoName}.png`
+    avatar: `img/avatars/user${photoName}.png`,
   };
 }
 
