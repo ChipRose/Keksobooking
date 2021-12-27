@@ -1,26 +1,19 @@
 import { createPromos } from './data.js';
 import { findDOMElement, findDOMElements } from './util/DOM-util.js';
 
+const RusCompareOfferTypes = {
+  flat: 'квартира',
+  bungalow: 'бунгало',
+  house: 'дом',
+  palace: 'дворец',
+};
+
 const promoTemplate = document.querySelector('#card').content.querySelector('.popup');
 const mapCanvas = document.querySelector('#map-canvas');
 
 const similarPromos = createPromos();
 const similarListFragment = document.createDocumentFragment();
 
-
-
-const getRusCompareForTypeOffer = (engType) => {
-  switch (engType) {
-    case 'flat':
-      return 'квартира';
-    case 'bungallow':
-      return 'бунгало';
-    case 'house':
-      return 'дом';
-    case 'palace':
-      return 'дворец';
-  }
-};
 
 const getRightRoomGuestWordsForm = (elementsQuantity) => {
   let formWords = {
@@ -79,7 +72,7 @@ similarPromos.forEach(({ author, offer }) => {
   findDOMElement(promoItem, '.popup__title').textContent = offer.title;
   findDOMElement(promoItem, '.popup__text--address').textContent = offer.address;
   findDOMElement(promoItem, '.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  findDOMElement(promoItem, '.popup__type').textContent = getRusCompareForTypeOffer(offer.type);
+  findDOMElement(promoItem, '.popup__type').textContent = RusCompareOfferTypes[offer.type];
   findDOMElement(promoItem, '.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   findDOMElement(promoItem, '.popup__text--capacity').textContent = getPhraseForAvailableRooms(offer.rooms, offer.guests);
   showAvailableFeatures(findDOMElements(promoItem, '.popup__feature'), offer.features);
@@ -89,3 +82,5 @@ similarPromos.forEach(({ author, offer }) => {
 });
 
 mapCanvas.appendChild(similarListFragment.children[0]);
+
+export { similarPromos };

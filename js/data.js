@@ -41,7 +41,7 @@ const OBJECT_TYPES = [
   'palace',
   'flat',
   'house',
-  'bungallow',
+  'bungalow',
 ];
 
 const TIMES_TO_CHECK_IN = [
