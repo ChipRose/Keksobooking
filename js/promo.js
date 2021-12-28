@@ -6,6 +6,7 @@ const RusCompareOfferTypes = {
   bungalow: 'бунгало',
   house: 'дом',
   palace: 'дворец',
+  hotel: 'отель',
 };
 
 const promoTemplate = document.querySelector('#card').content.querySelector('.popup');
