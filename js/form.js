@@ -1,10 +1,10 @@
-import {getPrice} from './data.js';
+import { getPrice } from './data.js';
 
 const offerForm = document.querySelector('.ad-form');
 const offerTypeSelect = offerForm.querySelector('#type');
 const offerPriceInput = offerForm.querySelector('#price');
 
-const setMinPrice = (offerType=offerTypeSelect.value) => {
+const setMinPrice = (offerType = offerTypeSelect.value) => {
   offerPriceInput.placeholder = getPrice(offerType).MIN;
   offerPriceInput.min = getPrice(offerType).MIN;
 }
@@ -12,16 +12,17 @@ const setMinPrice = (offerType=offerTypeSelect.value) => {
 setMinPrice();
 
 const setTimeCheck = (evt) => {
-  let nessesaryValue = {};
+  let nessesaryValue = '';
   if (evt.target.nodeName === 'SELECT') {
-    nessesaryValue=evt.target.value;
+    nessesaryValue = evt.target.value;
   }
-  return console.log(nessesaryValue);
+  const timeFields = timeCheck.querySelectorAll('select');
+  for (let timeField of timeFields) {
+    timeField.value = nessesaryValue;
+  }
 }
 
-setMinPrice();
-
-offerTypeSelect.addEventListener('input', () =>{
+offerTypeSelect.addEventListener('input', () => {
   setMinPrice();
 });
 
