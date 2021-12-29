@@ -1,10 +1,30 @@
-import {similarPromos} from './promo.js';
 import {getPrice} from './data.js';
 
-const offerTypeSelect = document.querySelector('#type');
-const offerPriceInput = document.querySelector('#price');
+const offerForm = document.querySelector('.ad-form');
+const offerTypeSelect = offerForm.querySelector('#type');
+const offerPriceInput = offerForm.querySelector('#price');
 
-offerTypeSelect.addEventListener('change', () =>{ 
-  offerPriceInput.placeholder = getPrice(offerTypeSelect.value).MIN;
+const setMinPrice = (offerType=offerTypeSelect.value) => {
+  offerPriceInput.placeholder = getPrice(offerType).MIN;
+  offerPriceInput.min = getPrice(offerType).MIN;
+}
+
+setMinPrice();
+
+const setTimeCheck = (evt) => {
+  let nessesaryValue = {};
+  if (evt.target.nodeName === 'SELECT') {
+    nessesaryValue=evt.target.value;
+  }
+  return console.log(nessesaryValue);
+}
+
+setMinPrice();
+
+offerTypeSelect.addEventListener('input', () =>{
+  setMinPrice();
 });
 
+const timeCheck = offerForm.querySelector('.ad-form__element--time');
+
+timeCheck.addEventListener('input', setTimeCheck);
