@@ -13,11 +13,6 @@ const Guests = {
   MAX: 20,
 };
 
-const Prices = {
-  MIN: 2000,
-  MAX: 5000,
-};
-
 const Coordinates = {
   X: {
     MIN: 35.65,
@@ -40,6 +35,7 @@ const TITLES = [
 const OBJECT_TYPES = [
   'palace',
   'flat',
+  'hotel',
   'house',
   'bungalow',
 ];
@@ -65,41 +61,75 @@ const FEATURES = [
   'conditioner',
 ];
 
+const DESCRIPTIONS = [
+  'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
+  'Просторные, светлые комнаты с высокими полками.',
+  'Комнаты в стиле лофт.',
+];
+
 const PHOTO_SOURCES = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 
+const getPrice = (objectType) => {
+  const minPrice = {
+    bungalow: 0,
+    flat: 1000,
+    hotel: 3000,
+    house: 5000,
+    palace: 10000,
+  }
+  return {
+    MIN: minPrice[objectType],
+    MAX: 1000000,
+  }
+};
+
 const createAuthor = (photoIndex) => {
   const necessaryNameLength = String(PROMO_QUANTITY).length;
   const nessesaryNulls = new Array(necessaryNameLength - String(photoIndex).length).fill('0');
-  const photoName = nessesaryNulls.join() + photoIndex;
+  const photoName = `img/avatars/user${nessesaryNulls.join() + photoIndex}.png`;
   return {
-    avatar: `img/avatars/user${photoName}.png`,
+    avatar: photoName,
   };
 }
 
 const createLocation = (xMin = Coordinates.X.MIN, xMax = Coordinates.X.MAX, yMin = Coordinates.Y.MIN, yMax = Coordinates.Y.MAX, accuracy = Coordinates.ACCURACY) => {
+  const xCoordinate = getRandomFloat(xMin, xMax, accuracy);
+  const yCoordinate = getRandomFloat(yMin, yMax, accuracy);
   return {
-    x: getRandomFloat(xMin, xMax, accuracy),
-    y: getRandomFloat(yMin, yMax, accuracy),
+    x: xCoordinate,
+    y: yCoordinate,
   };
 };
 
 const createOffer = (coordinateX, coordinateY) => {
+  const offerTitle = getRandomElement(TITLES);
+  const addressString = `${coordinateX}, ${coordinateY}`;
+  const offerType = getRandomElement(OBJECT_TYPES);
+  const offerPrice = getRandomInt(getPrice(offerType).MIN, getPrice(offerType).MAX);
+  const roomsQuantity = getRandomInt(Rooms.MIN, Rooms.MAX);
+  const guestsQuantity = getRandomInt(Guests.MIN, Guests.MAX);
+  const timeCheckIn = getRandomElement(TIMES_TO_CHECK_IN);
+  const timeCheckOut = getRandomElement(TIMES_TO_CHECK_OUT);
+  const availableFeatures = getVariousLengthRandomArray(FEATURES, getRandomInt(1, FEATURES.length));
+  const offerDescription = getRandomElement(DESCRIPTIONS);
+  const offerPhotos = getVariousLengthRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length));
+
   return {
-    title: getRandomElement(TITLES),
-    address: `${coordinateX}, ${coordinateY}`,
-    price: getRandomInt(Prices.MIN, Prices.MAX),
-    type: getRandomElement(OBJECT_TYPES),
-    rooms: getRandomInt(Rooms.MIN, Rooms.MAX),
-    guests: getRandomInt(Guests.MIN, Guests.MAX),
-    checkin: getRandomElement(TIMES_TO_CHECK_IN),
-    checkout: getRandomElement(TIMES_TO_CHECK_OUT),
-    features: getVariousLengthRandomArray(FEATURES, getRandomInt(1, FEATURES.length)),
-    description: 'Помещение уютное, здесь есть всё самое необходимое, а большое окно впускает много солнца.',
-    photos: getVariousLengthRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length)),
+    title: offerTitle,
+    address: addressString,
+    price: offerPrice,
+    type: offerType,
+    rooms: roomsQuantity,
+    guests: guestsQuantity,
+    checkin: timeCheckIn,
+    checkout: timeCheckOut,
+    features: availableFeatures,
+    description: offerDescription,
+    photos: offerPhotos,
   };
 };
 
@@ -112,4 +142,4 @@ const createPromos = () => {
   return promos;
 }
 
-export { createPromos };
+export { createPromos , getPrice};
