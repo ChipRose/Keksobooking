@@ -1,30 +1,30 @@
-import {getPrice} from './data.js';
+import { getPrice } from './data.js';
 
 const offerForm = document.querySelector('.ad-form');
 const offerTypeSelect = offerForm.querySelector('#type');
 const offerPriceInput = offerForm.querySelector('#price');
+const timeCheck = offerForm.querySelector('.ad-form__element--time');
 
-const setMinPrice = (offerType=offerTypeSelect.value) => {
+const setMinPrice = (offerType = offerTypeSelect.value) => {
   offerPriceInput.placeholder = getPrice(offerType).MIN;
   offerPriceInput.min = getPrice(offerType).MIN;
 }
 
-setMinPrice();
-
 const setTimeCheck = (evt) => {
-  let nessesaryValue = {};
-  if (evt.target.nodeName === 'SELECT') {
-    nessesaryValue=evt.target.value;
-  }
-  return console.log(nessesaryValue);
+  const FIELD_TIMEIN_ID = 'timein';
+  const FIELD_TIMEOUT_ID = 'timeout';
+  const nessesaryTimeValue = evt.target.value;
+  const elementId = evt.srcElement.id;
+  let relateElementId = '';
+  elementId === FIELD_TIMEIN_ID ? relateElementId = FIELD_TIMEOUT_ID : relateElementId = FIELD_TIMEIN_ID;
+  const relateEventElement = timeCheck.querySelector(`#${relateElementId}`);
+  relateEventElement.value = nessesaryTimeValue;
 }
 
 setMinPrice();
 
-offerTypeSelect.addEventListener('input', () =>{
+offerTypeSelect.addEventListener('change', () => {
   setMinPrice();
 });
 
-const timeCheck = offerForm.querySelector('.ad-form__element--time');
-
-timeCheck.addEventListener('input', setTimeCheck);
+timeCheck.addEventListener('change', setTimeCheck);
