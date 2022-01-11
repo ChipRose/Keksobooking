@@ -10,7 +10,6 @@ const setMinPrice = (offerType = offerTypeSelect.value) => {
   offerPriceInput.min = getPrice(offerType).MIN;
 }
 
-
 const setTimeCheck = (evt) => {
   const FIELD_TIMEIN_ID = 'timein';
   const FIELD_TIMEOUT_ID = 'timeout';

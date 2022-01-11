@@ -1,5 +1,4 @@
 import { createPromos } from './data.js';
-import { findDOMElement, findDOMElements } from './util/DOM-util.js';
 
 const RusCompareOfferTypes = {
   flat: 'квартира',
@@ -10,7 +9,6 @@ const RusCompareOfferTypes = {
 };
 
 const promoTemplate = document.querySelector('#card').content.querySelector('.popup');
-const mapCanvas = document.querySelector('#map-canvas');
 
 const similarPromos = createPromos();
 const similarListFragment = document.createDocumentFragment();
@@ -69,19 +67,17 @@ const showOfferPhotos = (photoBlock, availablePhotos) => {
 
 similarPromos.forEach(({ author, offer }) => {
   const promoItem = promoTemplate.cloneNode(true);
-  findDOMElement(promoItem, '.popup__avatar').src = author.avatar;
-  findDOMElement(promoItem, '.popup__title').textContent = offer.title;
-  findDOMElement(promoItem, '.popup__text--address').textContent = offer.address;
-  findDOMElement(promoItem, '.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  findDOMElement(promoItem, '.popup__type').textContent = RusCompareOfferTypes[offer.type];
-  findDOMElement(promoItem, '.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  findDOMElement(promoItem, '.popup__text--capacity').textContent = getPhraseForAvailableRooms(offer.rooms, offer.guests);
-  showAvailableFeatures(findDOMElements(promoItem, '.popup__feature'), offer.features);
-  findDOMElement(promoItem, '.popup__description').textContent = offer.description;
-  showOfferPhotos(findDOMElement(promoItem, '.popup__photos'), offer.photos);
+  promoItem.querySelector('.popup__avatar').src = author.avatar;
+  promoItem.querySelector('.popup__title').textContent = offer.title;
+  promoItem.querySelector('.popup__text--address').textContent = offer.address;
+  promoItem.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+  promoItem.querySelector('.popup__type').textContent = RusCompareOfferTypes[offer.type];
+  promoItem.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  promoItem.querySelector('.popup__text--capacity').textContent = getPhraseForAvailableRooms(offer.rooms, offer.guests);
+  showAvailableFeatures(promoItem.querySelectorAll('.popup__feature'), offer.features);
+  promoItem.querySelector('.popup__description').textContent = offer.description;
+  showOfferPhotos(promoItem.querySelector('.popup__photos'), offer.photos);
   similarListFragment.appendChild(promoItem);
 });
-
-mapCanvas.appendChild(similarListFragment.children[0]);
 
 export { similarPromos };
