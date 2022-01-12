@@ -65,6 +65,21 @@ const showOfferPhotos = (photoBlock, availablePhotos) => {
   photoBlock.appendChild(photoFragment);
 };
 
+const createCustomPopup = (point) => {
+  const popupElement = promoTemplate.cloneNode(true);
+  popupElement.querySelector('.popup__avatar').src = point.author.avatar;
+  popupElement.querySelector('.popup__title').textContent = point.offer.title;
+  popupElement.querySelector('.popup__text--address').textContent = point.offer.address;
+  popupElement.querySelector('.popup__text--price').textContent = `${point.offer.price} ₽/ночь`;
+  popupElement.querySelector('.popup__type').textContent = RusCompareOfferTypes[point.offer.type];
+  popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${point.offer.checkin}, выезд до ${point.offer.checkout}`;
+  popupElement.querySelector('.popup__text--capacity').textContent = getPhraseForAvailableRooms(point.offer.rooms, point.offer.guests);
+  showAvailableFeatures(popupElement.querySelectorAll('.popup__feature'), point.offer.features);
+  popupElement.querySelector('.popup__description').textContent = point.offer.description;
+  showOfferPhotos(popupElement.querySelector('.popup__photos'), point.offer.photos);
+  return popupElement;
+};
+
 similarPromos.forEach(({ author, offer }) => {
   const promoItem = promoTemplate.cloneNode(true);
   promoItem.querySelector('.popup__avatar').src = author.avatar;
@@ -80,4 +95,4 @@ similarPromos.forEach(({ author, offer }) => {
   similarListFragment.appendChild(promoItem);
 });
 
-export { similarPromos };
+export { createCustomPopup, similarPromos };

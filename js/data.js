@@ -22,7 +22,7 @@ const Coordinates = {
     MIN: 139.7,
     MAX: 139.8,
   },
-  ACCURACY: 4,
+  ACCURACY: 5,
 };
 
 const TITLES = [
@@ -140,6 +140,6 @@ const createPromos = () => {
     return Object.assign({}, { author: createAuthor(getIndex()) }, { offer: createOffer(getLocation.x, getLocation.y) }, { location: getLocation });
   });
   return promos;
-}
+};
 
 export { createPromos , getPrice};
