@@ -22,7 +22,7 @@ const Coordinates = {
     MIN: 139.7,
     MAX: 139.8,
   },
-  ACCURACY: 4,
+  ACCURACY: 5,
 };
 
 const TITLES = [
@@ -114,7 +114,7 @@ const createOffer = (coordinateX, coordinateY) => {
   const guestsQuantity = getRandomInt(Guests.MIN, Guests.MAX);
   const timeCheckIn = getRandomElement(TIMES_TO_CHECK_IN);
   const timeCheckOut = getRandomElement(TIMES_TO_CHECK_OUT);
-  const availableFeatures = getVariousLengthRandomArray(FEATURES, getRandomInt(1, FEATURES.length));
+  const availableFeatures = getVariousLengthRandomArray(FEATURES, getRandomInt(0, FEATURES.length));
   const offerDescription = getRandomElement(DESCRIPTIONS);
   const offerPhotos = getVariousLengthRandomArray(PHOTO_SOURCES, getRandomInt(1, PHOTO_SOURCES.length));
 
@@ -140,6 +140,6 @@ const createPromos = () => {
     return Object.assign({}, { author: createAuthor(getIndex()) }, { offer: createOffer(getLocation.x, getLocation.y) }, { location: getLocation });
   });
   return promos;
-}
+};
 
-export { createPromos , getPrice};
+export { createPromos, getPrice };
