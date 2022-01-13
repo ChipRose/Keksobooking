@@ -2,7 +2,7 @@ import { setInactiveState, setActiveState } from './page-state.js';
 import { mapLib } from './map-library.js';
 import { setAddress } from './form.js';
 import { createPromos } from './data.js';
-import {createCustomPopup, similarPromos} from './promo.js'
+import { createCustomPopup } from './promo.js'
 
 const COORDINATES_TOKYO = {
   LAT: 35.6894,
@@ -18,7 +18,7 @@ const MARKER_SIZES = {
   USUAL: {
     X: 40,
     Y: 40,
-  }
+  },
 };
 
 const mapCanvas = document.querySelector('#map-canvas');
@@ -41,50 +41,46 @@ mapLib.tileLayer(
   },
 ).addTo(map);
 
-var mapMainPin = mapLib.icon({
+const mapMainPin = mapLib.icon({
   iconUrl: '../img/pin/main-pin.svg',
   iconSize: [MARKER_SIZES.MAIN.X, MARKER_SIZES.MAIN.Y],
   iconAnchor: [MARKER_SIZES.MAIN.X / 2, MARKER_SIZES.MAIN.Y],
-  popupAnchor: [-3, -76],
+  popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
 const mainMarker = mapLib.marker({
   lat: COORDINATES_TOKYO.LAT,
   lng: COORDINATES_TOKYO.LNG,
 },
-  {
-    draggable: true,
-    icon: mapMainPin,
-  },
-);
+{
+  draggable: true,
+  icon: mapMainPin,
+});
 
 mainMarker.addTo(map);
 
-var mapUsualPin = mapLib.icon({
+const mapUsualPin = mapLib.icon({
   iconUrl: '../img/pin/pin.svg',
   iconSize: [MARKER_SIZES.USUAL.X, MARKER_SIZES.USUAL.Y],
   iconAnchor: [MARKER_SIZES.USUAL.X / 2, MARKER_SIZES.USUAL.Y],
-  popupAnchor: [-3, -76],
+  popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
-createPromos();
-
-const setUsualMarker = (offer, index) => {
+const setUsualMarker = (promo) => {
   const usualMarker = mapLib.marker({
-    lat: offer.location.x,
-    lng: offer.location.y,
+    lat: promo.location.x,
+    lng: promo.location.y,
   },
-    {
-      icon: mapUsualPin,
-    },
-  );
+  {
+    icon: mapUsualPin,
+  });
   usualMarker
     .addTo(map)
-    .bindPopup(createCustomPopup(offer));
+    .bindPopup(createCustomPopup(promo));
 };
 
-similarPromos.forEach((element,index) => {
-  setUsualMarker(element,index);
+createPromos().forEach((element) => {
+  setUsualMarker(element);
 });
 
 setAddress(COORDINATES_TOKYO.LAT, COORDINATES_TOKYO.LNG);

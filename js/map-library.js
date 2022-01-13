@@ -1,4 +1,4 @@
-const mapLib = L;
+import {L} from 'leaflet';
 
-export { mapLib };
+export { L as mapLib };
 
