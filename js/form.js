@@ -59,19 +59,15 @@ const setCapacity = (roomNumber) => {
   }
 
   for (let capacity of capacitySet) {
+    capacity.disabled = true;
     if (roomNumber === roomNumberNotForGuests) {
-      capacitySelect.value = capacityNotForGuests;
-      if (capacity.value !== capacityNotForGuests) {
-        capacity.disabled = true;
-      } else {
+      if (capacity.value === capacityNotForGuests) {
         capacity.disabled = false;
       }
     } else {
       if (capacity.value <= roomNumber && capacity.value !== capacityNotForGuests) {
         capacity.disabled = false;
-      } else {
-        capacity.disabled = true;
-      };
+      }
     }
   };
 };
