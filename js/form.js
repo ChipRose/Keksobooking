@@ -9,6 +9,16 @@ const promoTypeSelect = promoForm.querySelector('#type');
 const promoPriceInput = promoForm.querySelector('#price');
 const promoAddress = promoForm.querySelector('#address');
 const timeCheck = promoForm.querySelector('.ad-form__element--time');
+const roomNumberSelect = promoForm.querySelector('#room_number');
+const capacitySelect = promoForm.querySelector('#capacity');
+
+const setAddress = (coordinateLat, coordinateLng) => {
+  const Coordinates = {
+    LAT: coordinateLat.toFixed(COORDINATE_ACCURACY),
+    LNG: coordinateLng.toFixed(COORDINATE_ACCURACY),
+  };
+  promoAddress.value = `${Coordinates.LAT}, ${Coordinates.LNG}`;
+};
 
 const setMinPrice = (offerType = promoTypeSelect.value) => {
   promoPriceInput.placeholder = getPrice(offerType).MIN;
@@ -38,13 +48,39 @@ timeCheck.addEventListener('change', (evt) => {
   setTimeCheck(elementId, relateElementId);
 });
 
-const setAddress = (coordinateLat, coordinateLng) => {
-  const Coordinates = {
-    LAT: coordinateLat.toFixed(COORDINATE_ACCURACY),
-    LNG: coordinateLng.toFixed(COORDINATE_ACCURACY),
+const setCapacity = (roomNumber) => {
+  const roomNumberNotForGuests = '100';
+  const capacityNotForGuests = '0';
+  const capacitySet = capacitySelect.querySelectorAll('#capacity option');
+  if (roomNumber === roomNumberNotForGuests) {
+    capacitySelect.value = capacityNotForGuests;
+  } else {
+    capacitySelect.value = roomNumber;
+  }
+
+  for (let capacity of capacitySet) {
+    if (roomNumber === roomNumberNotForGuests) {
+      capacitySelect.value = capacityNotForGuests;
+      if (capacity.value !== capacityNotForGuests) {
+        capacity.disabled = true;
+      } else {
+        capacity.disabled = false;
+      }
+    } else {
+      if (capacity.value <= roomNumber && capacity.value !== capacityNotForGuests) {
+        capacity.disabled = false;
+      } else {
+        capacity.disabled = true;
+      };
+    }
   };
-  promoAddress.value = `${Coordinates.LAT}, ${Coordinates.LNG}`;
 };
+
+setCapacity(roomNumberSelect.value);
+
+roomNumberSelect.addEventListener('change', () => {
+  setCapacity(roomNumberSelect.value);
+});
 
 promoTitleInput.addEventListener('invalid', () => {
   checkEmptyField(promoTitleInput);
