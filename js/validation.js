@@ -1,4 +1,7 @@
-import {getPrice} from './data.js';
+import { getPrice } from './data.js';
+
+const ROOMS_NOT_FOR_GUESTS = '100';
+const CAPACITY_NOT_FOR_GUESTS = '0';
 
 const TitleLengthLimit = {
   MIN: 30,
@@ -6,7 +9,7 @@ const TitleLengthLimit = {
 };
 
 
-const checkEmptyField = (field) =>{
+const checkEmptyField = (field) => {
   if (field.validity.valueMissing) {
     field.setCustomValidity('Это обязательное поле');
   }
@@ -32,4 +35,24 @@ const checkValidePrice = (priceField, type, price) => {
   }
 };
 
-export { checkEmptyField, checkValideTitle, checkValidePrice };
+const checkCapacityDefault = (roomNumber) => {
+  if (roomNumber === ROOMS_NOT_FOR_GUESTS) {
+    return CAPACITY_NOT_FOR_GUESTS;
+  }
+  return roomNumber;
+};
+
+const checkValideCapacity = (capacityField, roomNumber) => {
+  const capacity = capacityField.value;
+  let message = '';
+  if (roomNumber === ROOMS_NOT_FOR_GUESTS) {
+    if (capacity !== CAPACITY_NOT_FOR_GUESTS) {
+      message = `Данное размещение "не для гостей"`
+    };
+  } else if (capacity > roomNumber || capacity === CAPACITY_NOT_FOR_GUESTS) {
+    message = `Выберите значение менее или равно "для ${roomNumber} гостей",  или комнату побольше`;
+  }
+  capacityField.setCustomValidity(message);
+};
+
+export { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity };

@@ -1,14 +1,16 @@
 import { getPrice } from './data.js';
-import { checkEmptyField, checkValideTitle, checkValidePrice } from './validation.js'
+import { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity } from './validation.js'
 
 const COORDINATE_ACCURACY = 5;
+const FIELD_TIMEIN_ID = 'timein';
+const FIELD_TIMEOUT_ID = 'timeout';
 
 const promoForm = document.querySelector('.ad-form');
 const promoTitleInput = promoForm.querySelector('#title');
 const promoTypeSelect = promoForm.querySelector('#type');
 const promoPriceInput = promoForm.querySelector('#price');
 const promoAddress = promoForm.querySelector('#address');
-const timeCheck = promoForm.querySelector('.ad-form__element--time');
+const timeForm = promoForm.querySelector('.ad-form__element--time');
 const roomNumberSelect = promoForm.querySelector('#room_number');
 const capacitySelect = promoForm.querySelector('#capacity');
 
@@ -31,51 +33,40 @@ promoTypeSelect.addEventListener('change', () => {
   setMinPrice();
 });
 
-const setTimeCheck = (elementID = 'timein', relateElementId = 'timeout') => {
+const setTime = (elementID, relateElementId) => {
   const nessesaryTimeValue = promoForm.querySelector(`#${elementID}`);
   const relateEventElement = promoForm.querySelector(`#${relateElementId}`);
   relateEventElement.value = nessesaryTimeValue.value;
 };
 
-setTimeCheck();
+setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID);
 
-timeCheck.addEventListener('change', (evt) => {
-  const FIELD_TIMEIN_ID = 'timein';
-  const FIELD_TIMEOUT_ID = 'timeout';
+timeForm.addEventListener('change', (evt) => {
   const elementId = evt.target.id;
-  let relateElementId = '';
-  elementId === FIELD_TIMEIN_ID ? relateElementId = FIELD_TIMEOUT_ID : relateElementId = FIELD_TIMEIN_ID;
-  setTimeCheck(elementId, relateElementId);
+  let relateElementId = FIELD_TIMEIN_ID;
+  if (elementId === FIELD_TIMEIN_ID) { relateElementId = FIELD_TIMEOUT_ID; }
+  setTime(elementId, relateElementId);
 });
 
 const setCapacity = (roomNumber) => {
-  const roomNumberNotForGuests = '100';
-  const capacityNotForGuests = '0';
-  const capacitySet = capacitySelect.querySelectorAll('#capacity option');
-  if (roomNumber === roomNumberNotForGuests) {
-    capacitySelect.value = capacityNotForGuests;
-  } else {
-    capacitySelect.value = roomNumber;
-  }
-
-  for (let capacity of capacitySet) {
-    capacity.disabled = true;
-    if (roomNumber === roomNumberNotForGuests) {
-      if (capacity.value === capacityNotForGuests) {
-        capacity.disabled = false;
-      }
-    } else {
-      if (capacity.value <= roomNumber && capacity.value !== capacityNotForGuests) {
-        capacity.disabled = false;
-      }
-    }
-  };
+  capacitySelect.value = checkCapacityDefault(roomNumber);
 };
 
 setCapacity(roomNumberSelect.value);
 
+const checkCapacity = (roomNumber) => {
+  checkValideCapacity(capacitySelect, roomNumber);
+  capacitySelect.reportValidity();
+};
+
+checkCapacity(roomNumberSelect.value);
+
+capacitySelect.addEventListener('change', () => {
+  checkCapacity(roomNumberSelect.value);
+});
+
 roomNumberSelect.addEventListener('change', () => {
-  setCapacity(roomNumberSelect.value);
+  checkCapacity(roomNumberSelect.value);
 });
 
 promoTitleInput.addEventListener('invalid', () => {
