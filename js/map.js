@@ -1,8 +1,8 @@
 import { setInactiveState, setActiveState } from './page-state.js';
-import { mapLib } from './map-library.js';
 import { setAddress } from './form.js';
 import { createPromos } from './data.js';
-import { createCustomPopup } from './promo.js'
+import { createCustomPopup } from './promo.js';
+import { mapLib } from './map-lib.js';
 
 const COORDINATES_TOKYO = {
   LAT: 35.6894,
@@ -48,14 +48,16 @@ const mapMainPin = mapLib.icon({
   popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
-const mainMarker = mapLib.marker({
-  lat: COORDINATES_TOKYO.LAT,
-  lng: COORDINATES_TOKYO.LNG,
-},
-{
-  draggable: true,
-  icon: mapMainPin,
-});
+const mainMarker = mapLib.marker(
+  {
+    lat: COORDINATES_TOKYO.LAT,
+    lng: COORDINATES_TOKYO.LNG,
+  },
+  {
+    draggable: true,
+    icon: mapMainPin,
+  },
+);
 
 mainMarker.addTo(map);
 
@@ -67,16 +69,19 @@ const mapUsualPin = mapLib.icon({
 });
 
 const setUsualMarker = (promo) => {
-  const usualMarker = mapLib.marker({
-    lat: promo.location.x,
-    lng: promo.location.y,
-  },
+  const usualMarker = mapLib.marker(
+    {
+      lat: promo.location.x,
+      lng: promo.location.y,
+    },
+    {
+      icon: mapUsualPin,
+    },
+  );
+  usualMarker.addTo(map).bindPopup(createCustomPopup(promo)),
   {
-    icon: mapUsualPin,
-  });
-  usualMarker
-    .addTo(map)
-    .bindPopup(createCustomPopup(promo));
+    keepInView: true,
+  };
 };
 
 createPromos().forEach((element) => {

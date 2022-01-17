@@ -73,7 +73,7 @@ const PHOTO_SOURCES = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 
-const getPrice = (objectType) => {
+const getPrice = (objectType='flat') => {
   const minPrice = {
     bungalow: 0,
     flat: 1000,
@@ -92,7 +92,7 @@ const createAuthor = (photoIndex) => {
   const nessesaryNulls = new Array(necessaryNameLength - String(photoIndex).length).fill('0');
   const photoName = `img/avatars/user${nessesaryNulls.join() + photoIndex}.png`;
   return {
-    avatar: photoName,
+    avatar: photoName, 
   };
 }
 

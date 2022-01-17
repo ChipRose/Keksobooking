@@ -6,6 +6,11 @@ const RusCompareOfferTypes = {
   hotel: 'отель',
 };
 
+const StepsWordsFormChanged = {
+  first: 1,
+  second: 4,
+};
+
 const promoTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const getRightRoomGuestWordsForm = (elementsQuantity) => {
@@ -13,13 +18,13 @@ const getRightRoomGuestWordsForm = (elementsQuantity) => {
     room: 'комнат',
     guest: 'гостей',
   };
-  if (elementsQuantity === 1) {
+  if (elementsQuantity === StepsWordsFormChanged.first) {
     formWords = {
       room: 'комната',
       guest: 'гостя',
     }
   }
-  if (elementsQuantity > 1 && elementsQuantity <= 4) {
+  if (elementsQuantity > StepsWordsFormChanged.first && elementsQuantity <= StepsWordsFormChanged.second) {
     formWords = {
       room: 'комнаты',
     }
