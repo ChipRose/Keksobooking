@@ -92,7 +92,7 @@ const createAuthor = (photoIndex) => {
   const nessesaryNulls = new Array(necessaryNameLength - String(photoIndex).length).fill('0');
   const photoName = `img/avatars/user${nessesaryNulls.join() + photoIndex}.png`;
   return {
-    avatar: photoName, 
+    avatar: photoName,
   };
 }
 
@@ -141,5 +141,8 @@ const createPromos = () => {
   });
   return promos;
 };
+console.log('исходные данные');
+console.log(createPromos());
+console.log('исходные данные');
 
 export { createPromos, getPrice };

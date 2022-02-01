@@ -1,7 +1,7 @@
 import { setInactiveState, setActiveState } from './page-state.js';
 import { setAddress } from './form.js';
 import { createPromos } from './data.js';
-import { createCustomPopup } from './promo.js';
+import { renderSimilarPromos } from './similar-promos.js';
 import { mapLib } from './map-lib.js';
 
 const COORDINATES_TOKYO = {
@@ -71,22 +71,19 @@ const mapUsualPin = mapLib.icon({
 const setUsualMarker = (promo) => {
   const usualMarker = mapLib.marker(
     {
-      lat: promo.location.x,
-      lng: promo.location.y,
+      lat: promo.location.lat,
+      lng: promo.location.lng,
     },
     {
       icon: mapUsualPin,
     },
   );
-  usualMarker.addTo(map).bindPopup(createCustomPopup(promo)),
+  usualMarker.addTo(map).bindPopup(renderSimilarPromos(promo)),
   {
     keepInView: true,
   };
 };
 
-createPromos().forEach((element) => {
-  setUsualMarker(element);
-});
 
 setAddress(COORDINATES_TOKYO.LAT, COORDINATES_TOKYO.LNG);
 
@@ -94,4 +91,4 @@ mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-
+export {setUsualMarker};
