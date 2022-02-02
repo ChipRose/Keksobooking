@@ -141,8 +141,5 @@ const createPromos = () => {
   });
   return promos;
 };
-console.log('исходные данные');
-console.log(createPromos());
-console.log('исходные данные');
 
 export { createPromos, getPrice };

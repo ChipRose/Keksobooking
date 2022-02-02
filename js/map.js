@@ -68,22 +68,23 @@ const mapUsualPin = mapLib.icon({
   popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
-const setUsualMarker = (promo) => {
-  const usualMarker = mapLib.marker(
+const setUsualMarkers = (similarPromo) => {
+  similarPromo.forEach(({author, offer, location}) => {
+    const usualMarker = mapLib.marker(
+      {
+        lat: location.lat,
+        lng: location.lng,
+      },
+      {
+        icon: mapUsualPin,
+      },
+    );
+    usualMarker.addTo(map).bindPopup(renderSimilarPromos({author, offer, location})),
     {
-      lat: promo.location.lat,
-      lng: promo.location.lng,
-    },
-    {
-      icon: mapUsualPin,
-    },
-  );
-  usualMarker.addTo(map).bindPopup(renderSimilarPromos(promo)),
-  {
-    keepInView: true,
-  };
+      keepInView: true,
+    };
+  });
 };
-
 
 setAddress(COORDINATES_TOKYO.LAT, COORDINATES_TOKYO.LNG);
 
@@ -91,4 +92,4 @@ mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-export {setUsualMarker};
+export { setUsualMarkers };
