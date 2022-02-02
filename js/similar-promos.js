@@ -1,8 +1,3 @@
-const PROPERTY_SET = {
-  PHOTOS: 'photos',
-  FEATURES: 'features',
-};
-
 const RusCompareOfferTypes = {
   flat: 'квартира',
   bungalow: 'бунгало',
@@ -65,22 +60,15 @@ const showOfferFeatures = (parentBlock, availableFeatures) => {
   })
 };
 
-const showAvailableFeatures = (parentBlock, availableProperty) => {
-  if (!availableProperty) {
-    parentBlock.classList.add('hidden');
-  } else {
-    showOfferFeatures(parentBlock, availableProperty);
-  };
-};
-
-const showAvailablePhoto = (parentBlock, availableProperty) => {
-  if (!availableProperty) {
-    parentBlock.classList.add('hidden');
-  } else {
+const showAvailableProperties = (parentBlock, availableProperty) => {
+  if(!availableProperty){
+    parentBlock.classList.add('hidden')
+  } else if(parentBlock.classList.contains('popup__photos')){
     showOfferPhotos(parentBlock, availableProperty);
-  };
+  } else if(parentBlock.classList.contains('popup__features')){
+    showOfferFeatures(parentBlock, availableProperty);
+  }
 };
-
 
 const renderSimilarPromos = ({ author, offer }) => {
   const popupElement = promoTemplate.cloneNode(true);
@@ -91,11 +79,10 @@ const renderSimilarPromos = ({ author, offer }) => {
   popupElement.querySelector('.popup__type').textContent = RusCompareOfferTypes[offer.type];
   popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   popupElement.querySelector('.popup__text--capacity').textContent = getPhraseForAvailableRooms(offer.rooms, offer.guests);
-  showAvailableFeatures(popupElement.querySelector('.popup__features'), offer.features);
+  showAvailableProperties(popupElement.querySelector('.popup__features'), offer.features);
   popupElement.querySelector('.popup__description').textContent = offer.description;
-  showAvailablePhoto(popupElement.querySelector('.popup__photos'), offer.photos);
+  showAvailableProperties(popupElement.querySelector('.popup__photos'), offer.photos);
   return popupElement;
 }
-
 
 export { renderSimilarPromos };

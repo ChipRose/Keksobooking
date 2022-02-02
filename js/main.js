@@ -1,10 +1,10 @@
 import './form.js';
 import './map.js';
 import './similar-promos.js';
-import { renderSimilarPromos } from './similar-promos.js';
 import { setUsualMarkers } from './map.js'
 
 const PROMO_QUANTITY = 10;
+
 fetch('https://23.javascript.pages.academy/keksobooking/data')
   .then((resolve) => resolve.json())
   .then((promos) => {

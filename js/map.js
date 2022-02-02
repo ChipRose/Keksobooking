@@ -1,6 +1,5 @@
 import { setInactiveState, setActiveState } from './page-state.js';
 import { setAddress } from './form.js';
-import { createPromos } from './data.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { mapLib } from './map-lib.js';
 
