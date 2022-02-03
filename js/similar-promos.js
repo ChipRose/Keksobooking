@@ -1,39 +1,39 @@
 const RusCompareOfferTypes = {
-  flat: 'квартира',
-  bungalow: 'бунгало',
-  house: 'дом',
-  palace: 'дворец',
-  hotel: 'отель',
+  FLAT: 'квартира',
+  BUNGALOW: 'бунгало',
+  HOUSE: 'дом',
+  PALACE: 'дворец',
+  HOTEL: 'отель',
 };
 
 const StepsWordsFormChanged = {
-  first: 1,
-  second: 4,
+  FIRST: 1,
+  SECOND: 4,
 };
 
 const promoTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const getRightRoomGuestWordsForm = (elementsQuantity) => {
   let formWords = {
-    room: 'комнат',
-    guest: 'гостей',
+    ROOM: 'комнат',
+    GUEST: 'гостей',
   };
-  if (elementsQuantity === StepsWordsFormChanged.first) {
+  if (elementsQuantity === StepsWordsFormChanged.FIRST) {
     formWords = {
-      room: 'комната',
-      guest: 'гостя',
+      ROOM: 'комната',
+      GUEST: 'гостя',
     }
   }
-  if (elementsQuantity > StepsWordsFormChanged.first && elementsQuantity <= StepsWordsFormChanged.second) {
+  if (elementsQuantity > StepsWordsFormChanged.FIRST && elementsQuantity <= StepsWordsFormChanged.SECOND) {
     formWords = {
-      room: 'комнаты',
+      ROOM: 'комнаты',
     }
   }
   return formWords;
 };
 
-const getPhraseForAvailableRooms = (roomsQuantity, guestQuantity) => {
-  return `${roomsQuantity} ${getRightRoomGuestWordsForm(roomsQuantity).room} для ${guestQuantity} ${getRightRoomGuestWordsForm(guestQuantity).guest}`
+const createPhraseForAvailableRooms = (roomsQuantity, guestQuantity) => {
+  return `${roomsQuantity} ${getRightRoomGuestWordsForm(roomsQuantity).ROOM} для ${guestQuantity} ${getRightRoomGuestWordsForm(guestQuantity).GUEST}`
 };
 
 const showOfferPhotos = (parentBlock, availablePhotos) => {
@@ -76,13 +76,14 @@ const renderSimilarPromos = ({ author, offer }) => {
   popupElement.querySelector('.popup__title').textContent = offer.title;
   popupElement.querySelector('.popup__text--address').textContent = offer.address;
   popupElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  popupElement.querySelector('.popup__type').textContent = RusCompareOfferTypes[offer.type];
+  popupElement.querySelector('.popup__type').textContent = RusCompareOfferTypes[offer.type.toUpperCase()];
   popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  popupElement.querySelector('.popup__text--capacity').textContent = getPhraseForAvailableRooms(offer.rooms, offer.guests);
+  popupElement.querySelector('.popup__text--capacity').textContent = createPhraseForAvailableRooms(offer.rooms, offer.guests);
   showAvailableProperties(popupElement.querySelector('.popup__features'), offer.features);
   popupElement.querySelector('.popup__description').textContent = offer.description;
   showAvailableProperties(popupElement.querySelector('.popup__photos'), offer.photos);
   return popupElement;
-}
+};
+
 
 export { renderSimilarPromos };

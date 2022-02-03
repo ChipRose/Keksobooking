@@ -1,9 +1,10 @@
-import { getPrice } from './data.js';
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity } from './validation.js'
+import { showAllertMessage } from './util/util.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
 const FIELD_TIMEOUT_ID = 'timeout';
+
 
 const promoForm = document.querySelector('.ad-form');
 const promoTitleInput = promoForm.querySelector('#title');
@@ -13,6 +14,21 @@ const promoAddress = promoForm.querySelector('#address');
 const timeForm = promoForm.querySelector('.ad-form__element--time');
 const roomNumberSelect = promoForm.querySelector('#room_number');
 const capacitySelect = promoForm.querySelector('#capacity');
+const successNoteTemplate = document.querySelector('#success').content.querySelector('.success');
+
+const getPrice = (objectType = 'flat') => {
+  const minPrice = {
+    bungalow: 0,
+    flat: 1000,
+    hotel: 3000,
+    house: 5000,
+    palace: 10000,
+  }
+  return {
+    MIN: minPrice[objectType],
+    MAX: 1000000,
+  }
+};
 
 const setAddress = (coordinateLat, coordinateLng) => {
   const Coordinates = {
@@ -88,4 +104,34 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-export { setAddress };
+const setPromoFormSubmit = (onSuccess) => {
+  promoForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const formData = new FormData(evt.target);
+    fetch('https://23.javascript.pages.academy/keksobooking ',
+      {
+        method: 'POST',
+        body: formData,
+      }).then(() => onSuccess());
+  });
+};
+
+const setSuccessState = () => { showAllertMessage(successNoteTemplate) };
+
+const createErrorMessage = () => {
+  const errorContainer = document.createElement('div');
+  errorContainer.style.zIndex = 100;
+  errorContainer.style.position = 'absolute';
+  errorContainer.style.left = 100;
+  errorContainer.style.top = 0;
+  errorContainer.style.right = -100;
+  errorContainer.style.padding = '10px';
+  errorContainer.style.fontSize = '30px';
+  errorContainer.style.textAlign = 'center';
+  errorContainer.style.backgroundColor = 'red';
+  errorContainer.textContent = 'Не удалось загрузить данные по соседям';
+  document.body.append(errorContainer);
+};
+
+
+export { setAddress, getPrice, setPromoFormSubmit, setSuccessState, createErrorMessage };
