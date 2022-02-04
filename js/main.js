@@ -1,3 +1,3 @@
 import './form.js';
 import './map.js';
-import './data.js';
+import './create-fetch.js';

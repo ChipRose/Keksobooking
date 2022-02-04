@@ -1,5 +1,5 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity } from './validation.js'
-import { showAllertMessage } from './util/util.js';
+import { createErrorMessage, createSuccessMessage, showAllertMessage } from './util/util.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -14,7 +14,6 @@ const promoAddress = promoForm.querySelector('#address');
 const timeForm = promoForm.querySelector('.ad-form__element--time');
 const roomNumberSelect = promoForm.querySelector('#room_number');
 const capacitySelect = promoForm.querySelector('#capacity');
-const successNoteTemplate = document.querySelector('#success').content.querySelector('.success');
 
 const getPrice = (objectType = 'flat') => {
   const minPrice = {
@@ -104,34 +103,39 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-const setPromoFormSubmit = (onSuccess) => {
+const postData = (onSuccess, onError, formData) => {
+  fetch('https://23.javascript.pages.academy/keksobooking ',
+    {
+      method: 'POST',
+      body: formData,
+    })
+    .then((response) => {
+      if (response.ok) {
+        const promos = response.json();
+        return promos;
+      }
+      throw new Error(`${response.status} ${response.statusText}`);
+    })
+    .then(() => {
+      onSuccess();
+      promoForm.reset();
+    })
+    .catch((err) => {
+      onError(err);
+    });
+};
+
+const setPromoFormSubmit = (onSuccess, onError) => {
   promoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
-    fetch('https://23.javascript.pages.academy/keksobooking ',
-      {
-        method: 'POST',
-        body: formData,
-      }).then(() => onSuccess());
+    postData(onSuccess, onError, formData);
   });
 };
 
-const setSuccessState = () => { showAllertMessage(successNoteTemplate) };
 
-const createErrorMessage = () => {
-  const errorContainer = document.createElement('div');
-  errorContainer.style.zIndex = 100;
-  errorContainer.style.position = 'absolute';
-  errorContainer.style.left = 100;
-  errorContainer.style.top = 0;
-  errorContainer.style.right = -100;
-  errorContainer.style.padding = '10px';
-  errorContainer.style.fontSize = '30px';
-  errorContainer.style.textAlign = 'center';
-  errorContainer.style.backgroundColor = 'red';
-  errorContainer.textContent = 'Не удалось загрузить данные по соседям';
-  document.body.append(errorContainer);
-};
+const setSuccessState = () => { showAllertMessage(createSuccessMessage) };
 
+const setErrorState = (message) => { showAllertMessage(createErrorMessage(message)) };
 
-export { setAddress, getPrice, setPromoFormSubmit, setSuccessState, createErrorMessage };
+export { setAddress, getPrice, setPromoFormSubmit, setSuccessState, setErrorState };
