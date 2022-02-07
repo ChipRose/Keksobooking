@@ -1,10 +1,11 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity } from './validation.js'
 import { createErrorMessage, createSuccessMessage, showAllertMessage } from './util/util.js';
+import { sendData } from './api.js';
+import { setAddressDefault } from './map.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
 const FIELD_TIMEOUT_ID = 'timeout';
-
 
 const promoForm = document.querySelector('.ad-form');
 const promoTitleInput = promoForm.querySelector('#title');
@@ -42,7 +43,9 @@ const setMinPrice = (offerType = promoTypeSelect.value) => {
   promoPriceInput.min = getPrice(offerType).MIN;
 };
 
-setMinPrice();
+const setMinPriceDefault = () => {
+  setMinPrice(promoTypeSelect.value);
+};
 
 promoTypeSelect.addEventListener('change', () => {
   setMinPrice();
@@ -54,7 +57,9 @@ const setTime = (elementID, relateElementId) => {
   relateEventElement.value = nessesaryTimeValue.value;
 };
 
-setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID);
+const setTimeDefault = () => {
+  setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID);
+};
 
 timeForm.addEventListener('change', (evt) => {
   const elementId = evt.target.id;
@@ -67,7 +72,18 @@ const setCapacity = (roomNumber) => {
   capacitySelect.value = checkCapacityDefault(roomNumber);
 };
 
-setCapacity(roomNumberSelect.value);
+const setCapacityDefault = () => {
+  setCapacity(roomNumberSelect.value);
+};
+
+const setInitialState = () => {
+  setAddressDefault();
+  setMinPriceDefault();
+  setTimeDefault();
+  setCapacityDefault();
+};
+
+setInitialState();
 
 const checkCapacity = (roomNumber) => {
   checkValideCapacity(capacitySelect, roomNumber);
@@ -103,38 +119,19 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-const postData = (onSuccess, onError, formData) => {
-  fetch('https://23.javascript.pages.academy/keksobooking ',
-    {
-      method: 'POST',
-      body: formData,
-    })
-    .then((response) => {
-      if (response.ok) {
-        const promos = response.json();
-        return promos;
-      }
-      throw new Error(`${response.status} ${response.statusText}`);
-    })
-    .then(() => {
-      onSuccess();
-      promoForm.reset();
-    })
-    .catch((err) => {
-      onError(err);
-    });
-};
-
-const setPromoFormSubmit = (onSuccess, onError) => {
+const setPromoFormSubmit = (setSuccessState) => {
   promoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
-    postData(onSuccess, onError, formData);
+    sendData(() => setSuccessState(), formData);
   });
 };
 
-
-const setSuccessState = () => { showAllertMessage(createSuccessMessage) };
+const setSuccessState = () => {
+  showAllertMessage(createSuccessMessage);
+  promoForm.reset();
+  setInitialState();
+};
 
 const setErrorState = (message) => { showAllertMessage(createErrorMessage(message)) };
 

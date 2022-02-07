@@ -68,7 +68,7 @@ const mapUsualIcon = mapLib.icon({
 });
 
 const setUsualMarkers = (similarPromo) => {
-  similarPromo.forEach(({author, offer, location}) => {
+  similarPromo.forEach(({ author, offer, location }) => {
     const usualMarker = mapLib.marker(
       {
         lat: location.lat,
@@ -78,17 +78,23 @@ const setUsualMarkers = (similarPromo) => {
         icon: mapUsualIcon,
       },
     );
-    usualMarker.addTo(map).bindPopup(renderSimilarPromos({author, offer, location})),
+    usualMarker.addTo(map).bindPopup(renderSimilarPromos({ author, offer, location })),
     {
       keepInView: true,
     };
   });
 };
 
-setAddress(COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG);
+const setAddressDefault = () => {
+  const coordinateLat = COORDINATES_DEFAULT.LAT;
+  const coordinateLng = COORDINATES_DEFAULT.LNG;
+  setAddress(coordinateLat, coordinateLng);
+};
+
+//setAddressDefault();
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-export { setUsualMarkers };
+export { setUsualMarkers, setAddressDefault };
