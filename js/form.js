@@ -1,5 +1,5 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
-import { createErrorMessage, createMessage, showMessage, showAllertMessage } from './util/util.js';
+import { createMessage, showMessage } from './util/util.js';
 import { sendData } from './api.js';
 import { setMainMarkerDefault } from './map.js';
 
