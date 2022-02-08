@@ -4,14 +4,13 @@ import './api.js';
 
 import { setUsualMarkers } from './map.js';
 import { getData } from './api.js';
+import { showAllertMessage, createErrorMessage } from './util/util.js';
 
-import { setPromoFormSubmit, clearForm, setSuccessState } from './form.js';
+import { setPromoFormSubmit, clearForm, setSuccessState, setErrorState } from './form.js';
 
 const PROMO_QUANTITY = 10;
 
-getData((promos) => {
-  setUsualMarkers(promos.slice(0, PROMO_QUANTITY));
-});
+getData((promos) => setUsualMarkers(promos.slice(0, PROMO_QUANTITY)), () => showAllertMessage(createErrorMessage));
 
-setPromoFormSubmit(setSuccessState);
+setPromoFormSubmit(setSuccessState, setErrorState);
 clearForm();

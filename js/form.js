@@ -1,5 +1,5 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
-import { createErrorMessage, createSuccessMessage, showAllertMessage, showSuccessMessage } from './util/util.js';
+import { createErrorMessage, createMessage, showMessage, showAllertMessage } from './util/util.js';
 import { sendData } from './api.js';
 import { setMainMarkerDefault } from './map.js';
 
@@ -139,20 +139,27 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-const setPromoFormSubmit = (setSuccessState) => {
+const setPromoFormSubmit = (onSuccess, onError) => {
   promoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
-    sendData(() => setSuccessState(), formData);
+    sendData(() => onSuccess(), () => onError(), formData);
   });
 };
 
 const setSuccessState = () => {
-  showSuccessMessage(createSuccessMessage);
+  const SUCCESS_MESSAGE_ID = 'success';
+  const SUCCESS_MESSAGE_CONTENT = 'success';
+  showMessage(createMessage(SUCCESS_MESSAGE_ID, SUCCESS_MESSAGE_CONTENT));
   setInitialState();
 };
 
-const setErrorState = (message) => { showAllertMessage(createErrorMessage(message)) };
+const setErrorState = () => {
+  const ERROR_MESSAGE_ID = 'error';
+  const ERROR_MESSAGE_CONTENT = 'error';
+  const ERROR_BUTTON = 'error__button';
+  showMessage(createMessage(ERROR_MESSAGE_ID, ERROR_MESSAGE_CONTENT), ERROR_BUTTON);
+};
 
 const clearForm = () => {
   promoForm.addEventListener('reset', (evt) => {

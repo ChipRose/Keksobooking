@@ -1,19 +1,18 @@
-import {setErrorState } from './form.js';
-
-const getData = (onSuccess) => {
+const getData = (onSuccess, onError) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if (response.ok) {
         const promos = response.json();
         return promos;
+      } else {
+        onError()
       }
-      setErrorState(`Ошибка загрузки данных ${response.statusText}`);
     })
     .then((promos) => onSuccess(promos))
-    .catch((err) => setErrorState(`Ошибка загрузки данных ${err.status}`));
+    .catch(() => onError());
 };
 
-const sendData = (onSuccess, body) => {
+const sendData = (onSuccess, onError, body) => {
   fetch(
     'https://23.javascript.pages.academy/keksobooking',
     {
@@ -24,11 +23,12 @@ const sendData = (onSuccess, body) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
-      } else {
-        setErrorState(`Ошибка отправки формы ${response.status} ${response.statusText}`);
+      }
+      else {
+        onError();
       }
     })
-    .catch((err) => setErrorState(`Ошибка отправки данных ${err.status}`));
+    .catch(() => onError());
 };
 
-export { getData, sendData }
+export { getData, sendData };
