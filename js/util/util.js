@@ -1,6 +1,15 @@
 const ALERT_SHOW_TIME = 3000;
 
+const Keys = {
+  ESCAPE: 'Escape',
+  ESC: 'ESC'
+}
+
 const body = document.querySelector('body');
+
+const isEscape = (evt) => {
+  return evt.key === Keys.ESC || evt.key ===Keys.ESCAPE;
+}
 
 const createMessage = (templateID, contentClass) => {
   const template = document.querySelector(`#${templateID}`).content.querySelector(`.${contentClass}`);
@@ -15,7 +24,7 @@ const showMessage = (template, buttonClose) => {
   })
 
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === ('Escape' || 'Esc')) {
+    if (isEscape(evt)) {
       template.remove();
     }
   });
