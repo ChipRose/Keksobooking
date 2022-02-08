@@ -86,4 +86,4 @@ const renderSimilarPromos = ({ author, offer }) => {
 };
 
 
-export { renderSimilarPromos };
+export { renderSimilarPromos, getRightRoomGuestWordsForm };

@@ -2,7 +2,8 @@ const ALERT_SHOW_TIME = 3000;
 
 const createSuccessMessage = () => {
   const successContainer = document.querySelector('#success').content.querySelector('.success');
-  return successContainer;
+  const successElement = successContainer.cloneNode(true);
+  return successElement;
 };
 
 const createErrorMessage = (message) => {
@@ -35,4 +36,20 @@ const showAllertMessage = (template, message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { createErrorMessage, createSuccessMessage, showAllertMessage };
+const showSuccessMessage = (template) => {
+  const body = document.querySelector('body');
+  const messageElement = template();
+  body.appendChild(messageElement);
+
+  messageElement.addEventListener('click', () => {
+    body.removeChild(messageElement);
+  })
+
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === ('Escape' || 'Esc')) {
+      body.removeChild(messageElement);
+    }
+  });
+};
+
+export { createErrorMessage, createSuccessMessage, showAllertMessage, showSuccessMessage };

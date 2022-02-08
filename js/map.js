@@ -58,6 +58,11 @@ const mainMarker = mapLib.marker(
   },
 );
 
+const setMainMarkerDefault = () => {
+  mainMarker.setLatLng([COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG]);
+  setAddress(COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG);
+};
+
 mainMarker.addTo(map);
 
 const mapUsualIcon = mapLib.icon({
@@ -85,16 +90,8 @@ const setUsualMarkers = (similarPromo) => {
   });
 };
 
-const setAddressDefault = () => {
-  const coordinateLat = COORDINATES_DEFAULT.LAT;
-  const coordinateLng = COORDINATES_DEFAULT.LNG;
-  setAddress(coordinateLat, coordinateLng);
-};
-
-//setAddressDefault();
-
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-export { setUsualMarkers, setAddressDefault };
+export { setUsualMarkers, setMainMarkerDefault };

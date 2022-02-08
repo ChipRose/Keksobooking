@@ -1,7 +1,7 @@
-import { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity } from './validation.js'
-import { createErrorMessage, createSuccessMessage, showAllertMessage } from './util/util.js';
+import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
+import { createErrorMessage, createSuccessMessage, showAllertMessage, showSuccessMessage } from './util/util.js';
 import { sendData } from './api.js';
-import { setAddressDefault } from './map.js';
+import { setMainMarkerDefault } from './map.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -15,17 +15,28 @@ const promoAddress = promoForm.querySelector('#address');
 const timeForm = promoForm.querySelector('.ad-form__element--time');
 const roomNumberSelect = promoForm.querySelector('#room_number');
 const capacitySelect = promoForm.querySelector('#capacity');
+const featuresSet = promoForm.querySelectorAll('.feature__checkbox');
+const descriptionTextArea = promoForm.querySelector('#description');
+
+const RoomsValue = {
+  FOR_ONE: '1',
+  NOT_FOR_GUESTS: '100',
+};
+
+const CapacityValue = {
+  FOR_ONE: '1',
+  NOT_FOR_GUESTS: '0',
+}
 
 const getPrice = (objectType = 'flat') => {
   const minPrice = {
-    bungalow: 0,
-    flat: 1000,
-    hotel: 3000,
-    house: 5000,
-    palace: 10000,
+    BUNGALOW: 0,
+    FLAT: 1000,
+    HOTEL: 3000,
+    HOUSE: 5000,
   }
   return {
-    MIN: minPrice[objectType],
+    MIN: minPrice[objectType.toUpperCase()],
     MAX: 1000000,
   }
 };
@@ -38,7 +49,7 @@ const setAddress = (coordinateLat, coordinateLng) => {
   promoAddress.value = `${Coordinates.LAT}, ${Coordinates.LNG}`;
 };
 
-const setMinPrice = (offerType = promoTypeSelect.value) => {
+const setMinPrice = (offerType) => {
   promoPriceInput.placeholder = getPrice(offerType).MIN;
   promoPriceInput.min = getPrice(offerType).MIN;
 };
@@ -68,29 +79,38 @@ timeForm.addEventListener('change', (evt) => {
   setTime(elementId, relateElementId);
 });
 
-const setCapacity = (roomNumber) => {
-  capacitySelect.value = checkCapacityDefault(roomNumber);
+const setCapacityDefault = () => {
+  roomNumberSelect.value = RoomsValue.FOR_ONE;
+  capacitySelect.value = CapacityValue.FOR_ONE;
 };
 
-const setCapacityDefault = () => {
-  setCapacity(roomNumberSelect.value);
+const setFeaturesDefault = () => {
+  featuresSet.forEach((feature) => {
+    feature.checked = false;
+  });
+};
+
+const clearField = (fields) => {
+  fields.forEach((field) => {
+    field.value = '';
+  })
 };
 
 const setInitialState = () => {
-  setAddressDefault();
+  clearField([promoTitleInput, promoPriceInput, descriptionTextArea]);
+  setMainMarkerDefault();
   setMinPriceDefault();
   setTimeDefault();
   setCapacityDefault();
+  setFeaturesDefault();
 };
 
 setInitialState();
 
 const checkCapacity = (roomNumber) => {
-  checkValideCapacity(capacitySelect, roomNumber);
+  checkValideCapacity(capacitySelect, CapacityValue.NOT_FOR_GUESTS, roomNumber, RoomsValue.NOT_FOR_GUESTS);
   capacitySelect.reportValidity();
 };
-
-checkCapacity(roomNumberSelect.value);
 
 capacitySelect.addEventListener('change', () => {
   checkCapacity(roomNumberSelect.value);
@@ -128,11 +148,17 @@ const setPromoFormSubmit = (setSuccessState) => {
 };
 
 const setSuccessState = () => {
-  showAllertMessage(createSuccessMessage);
-  promoForm.reset();
+  showSuccessMessage(createSuccessMessage);
   setInitialState();
 };
 
 const setErrorState = (message) => { showAllertMessage(createErrorMessage(message)) };
 
-export { setAddress, getPrice, setPromoFormSubmit, setSuccessState, setErrorState };
+const clearForm = () => {
+  promoForm.addEventListener('reset', (evt) => {
+    evt.preventDefault();
+    setInitialState();
+  });
+}
+
+export { setAddress, getPrice, setPromoFormSubmit, clearForm, setSuccessState, setErrorState, setInitialState };

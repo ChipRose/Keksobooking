@@ -7,10 +7,10 @@ const getData = (onSuccess) => {
         const promos = response.json();
         return promos;
       }
-      setErrorState(`Ошибка загрузки данных ${response.status} ${response.statusText}`);
+      setErrorState(`Ошибка загрузки данных ${response.statusText}`);
     })
     .then((promos) => onSuccess(promos))
-    .catch((err) => setErrorState(`Ошибка загрузки данных ${err}`));
+    .catch((err) => setErrorState(`Ошибка загрузки данных ${err.status}`));
 };
 
 const sendData = (onSuccess, body) => {
@@ -28,7 +28,7 @@ const sendData = (onSuccess, body) => {
         setErrorState(`Ошибка отправки формы ${response.status} ${response.statusText}`);
       }
     })
-    .catch((err) => setErrorState(`Ошибка отправки данных ${err}`));
+    .catch((err) => setErrorState(`Ошибка отправки данных ${err.status}`));
 };
 
 export { getData, sendData }
