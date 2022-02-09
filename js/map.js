@@ -1,10 +1,9 @@
-import { setInactiveState, setActiveState } from './page-state.js';
-import { setAddress } from './form.js';
-import { createPromos } from './data.js';
-import { createCustomPopup } from './promo.js';
 import { mapLib } from './map-lib.js';
+import { setInactiveState, setActiveState } from './page-state.js';
+import { renderSimilarPromos } from './similar-promos.js';
+import { setAddress } from './form.js';
 
-const COORDINATES_TOKYO = {
+const COORDINATES_DEFAULT = {
   LAT: 35.6894,
   LNG: 139.692,
   ZOOM: 12,
@@ -30,9 +29,9 @@ const map = mapLib.map(mapCanvas)
     setActiveState();
   })
   .setView({
-    lat: COORDINATES_TOKYO.LAT,
-    lng: COORDINATES_TOKYO.LNG,
-  }, COORDINATES_TOKYO.ZOOM);
+    lat: COORDINATES_DEFAULT.LAT,
+    lng: COORDINATES_DEFAULT.LNG,
+  }, COORDINATES_DEFAULT.ZOOM);
 
 mapLib.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -41,57 +40,58 @@ mapLib.tileLayer(
   },
 ).addTo(map);
 
-const mapMainPin = mapLib.icon({
+const mapMainIcon = mapLib.icon({
   iconUrl: '../img/pin/main-pin.svg',
   iconSize: [MARKER_SIZES.MAIN.X, MARKER_SIZES.MAIN.Y],
   iconAnchor: [MARKER_SIZES.MAIN.X / 2, MARKER_SIZES.MAIN.Y],
-  popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
+  popupAnchor: [0, -MARKER_SIZES.MAIN.Y / 2],
 });
 
 const mainMarker = mapLib.marker(
   {
-    lat: COORDINATES_TOKYO.LAT,
-    lng: COORDINATES_TOKYO.LNG,
+    lat: COORDINATES_DEFAULT.LAT,
+    lng: COORDINATES_DEFAULT.LNG,
   },
   {
     draggable: true,
-    icon: mapMainPin,
+    icon: mapMainIcon,
   },
 );
 
+const setMainMarkerDefault = () => {
+  mainMarker.setLatLng([COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG]);
+  setAddress(COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG);
+};
+
 mainMarker.addTo(map);
 
-const mapUsualPin = mapLib.icon({
+const mapUsualIcon = mapLib.icon({
   iconUrl: '../img/pin/pin.svg',
   iconSize: [MARKER_SIZES.USUAL.X, MARKER_SIZES.USUAL.Y],
   iconAnchor: [MARKER_SIZES.USUAL.X / 2, MARKER_SIZES.USUAL.Y],
   popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
-const setUsualMarker = (promo) => {
-  const usualMarker = mapLib.marker(
+const setUsualMarkers = (similarPromo) => {
+  similarPromo.forEach(({ author, offer, location }) => {
+    const usualMarker = mapLib.marker(
+      {
+        lat: location.lat,
+        lng: location.lng,
+      },
+      {
+        icon: mapUsualIcon,
+      },
+    );
+    usualMarker.addTo(map).bindPopup(renderSimilarPromos({ author, offer, location })),
     {
-      lat: promo.location.x,
-      lng: promo.location.y,
-    },
-    {
-      icon: mapUsualPin,
-    },
-  );
-  usualMarker.addTo(map).bindPopup(createCustomPopup(promo)),
-  {
-    keepInView: true,
-  };
+      keepInView: true,
+    };
+  });
 };
-
-createPromos().forEach((element) => {
-  setUsualMarker(element);
-});
-
-setAddress(COORDINATES_TOKYO.LAT, COORDINATES_TOKYO.LNG);
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-
+export { setUsualMarkers, setMainMarkerDefault };

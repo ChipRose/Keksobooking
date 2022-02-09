@@ -1,5 +1,7 @@
-import { getPrice } from './data.js';
-import { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity } from './validation.js'
+import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
+import { createMessage, showMessage } from './util/util.js';
+import { sendData } from './api.js';
+import { setMainMarkerDefault } from './map.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -13,6 +15,31 @@ const promoAddress = promoForm.querySelector('#address');
 const timeForm = promoForm.querySelector('.ad-form__element--time');
 const roomNumberSelect = promoForm.querySelector('#room_number');
 const capacitySelect = promoForm.querySelector('#capacity');
+const featuresSet = promoForm.querySelectorAll('.feature__checkbox');
+const descriptionTextArea = promoForm.querySelector('#description');
+
+const RoomsValue = {
+  FOR_ONE: '1',
+  NOT_FOR_GUESTS: '100',
+};
+
+const CapacityValue = {
+  FOR_ONE: '1',
+  NOT_FOR_GUESTS: '0',
+}
+
+const getPrice = (objectType = 'flat') => {
+  const minPrice = {
+    BUNGALOW: 0,
+    FLAT: 1000,
+    HOTEL: 3000,
+    HOUSE: 5000,
+  }
+  return {
+    MIN: minPrice[objectType.toUpperCase()],
+    MAX: 1000000,
+  }
+};
 
 const setAddress = (coordinateLat, coordinateLng) => {
   const Coordinates = {
@@ -22,12 +49,14 @@ const setAddress = (coordinateLat, coordinateLng) => {
   promoAddress.value = `${Coordinates.LAT}, ${Coordinates.LNG}`;
 };
 
-const setMinPrice = (offerType = promoTypeSelect.value) => {
+const setMinPrice = (offerType) => {
   promoPriceInput.placeholder = getPrice(offerType).MIN;
   promoPriceInput.min = getPrice(offerType).MIN;
 };
 
-setMinPrice();
+const setMinPriceDefault = () => {
+  setMinPrice(promoTypeSelect.value);
+};
 
 promoTypeSelect.addEventListener('change', () => {
   setMinPrice();
@@ -39,7 +68,9 @@ const setTime = (elementID, relateElementId) => {
   relateEventElement.value = nessesaryTimeValue.value;
 };
 
-setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID);
+const setTimeDefault = () => {
+  setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID);
+};
 
 timeForm.addEventListener('change', (evt) => {
   const elementId = evt.target.id;
@@ -48,18 +79,38 @@ timeForm.addEventListener('change', (evt) => {
   setTime(elementId, relateElementId);
 });
 
-const setCapacity = (roomNumber) => {
-  capacitySelect.value = checkCapacityDefault(roomNumber);
+const setCapacityDefault = () => {
+  roomNumberSelect.value = RoomsValue.FOR_ONE;
+  capacitySelect.value = CapacityValue.FOR_ONE;
 };
 
-setCapacity(roomNumberSelect.value);
+const setFeaturesDefault = () => {
+  featuresSet.forEach((feature) => {
+    feature.checked = false;
+  });
+};
+
+const clearField = (fields) => {
+  fields.forEach((field) => {
+    field.value = '';
+  })
+};
+
+const setInitialState = () => {
+  clearField([promoTitleInput, promoPriceInput, descriptionTextArea]);
+  setMainMarkerDefault();
+  setMinPriceDefault();
+  setTimeDefault();
+  setCapacityDefault();
+  setFeaturesDefault();
+};
+
+setInitialState();
 
 const checkCapacity = (roomNumber) => {
-  checkValideCapacity(capacitySelect, roomNumber);
+  checkValideCapacity(capacitySelect, CapacityValue.NOT_FOR_GUESTS, roomNumber, RoomsValue.NOT_FOR_GUESTS);
   capacitySelect.reportValidity();
 };
-
-checkCapacity(roomNumberSelect.value);
 
 capacitySelect.addEventListener('change', () => {
   checkCapacity(roomNumberSelect.value);
@@ -88,4 +139,33 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-export { setAddress };
+const setPromoFormSubmit = (onSuccess, onError) => {
+  promoForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const formData = new FormData(evt.target);
+    sendData(() => onSuccess(), () => onError(), formData);
+  });
+};
+
+const setSuccessState = () => {
+  const SUCCESS_MESSAGE_ID = 'success';
+  const SUCCESS_MESSAGE_CONTENT = 'success';
+  showMessage(createMessage(SUCCESS_MESSAGE_ID, SUCCESS_MESSAGE_CONTENT));
+  setInitialState();
+};
+
+const setErrorState = () => {
+  const ERROR_MESSAGE_ID = 'error';
+  const ERROR_MESSAGE_CONTENT = 'error';
+  const ERROR_BUTTON = 'error__button';
+  showMessage(createMessage(ERROR_MESSAGE_ID, ERROR_MESSAGE_CONTENT), ERROR_BUTTON);
+};
+
+const clearForm = () => {
+  promoForm.addEventListener('reset', (evt) => {
+    evt.preventDefault();
+    setInitialState();
+  });
+}
+
+export { setAddress, getPrice, setPromoFormSubmit, clearForm, setSuccessState, setErrorState, setInitialState };

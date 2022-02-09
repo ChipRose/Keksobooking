@@ -29,4 +29,5 @@ const setActiveState = () => {
   setElementsActive(newOfferFormElements);
   setElementsActive(mapFiltersFormElements);
 };
+
 export { setInactiveState, setActiveState };

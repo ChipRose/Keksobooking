@@ -1,13 +1,9 @@
-import { getPrice } from './data.js';
-
-const ROOMS_NOT_FOR_GUESTS = '100';
-const CAPACITY_NOT_FOR_GUESTS = '0';
+import { getPrice } from './form.js';
 
 const TitleLengthLimit = {
   MIN: 30,
   MAX: 100,
 };
-
 
 const checkEmptyField = (field) => {
   if (field.validity.valueMissing) {
@@ -35,24 +31,17 @@ const checkValidePrice = (priceField, type, price) => {
   }
 };
 
-const checkCapacityDefault = (roomNumber) => {
-  if (roomNumber === ROOMS_NOT_FOR_GUESTS) {
-    return CAPACITY_NOT_FOR_GUESTS;
-  }
-  return roomNumber;
-};
-
-const checkValideCapacity = (capacityField, roomNumber) => {
+const checkValideCapacity = (capacityField, capacityNotForGuests, roomNumber, roomNotForGuests) => {
   const capacity = capacityField.value;
   let message = '';
-  if (roomNumber === ROOMS_NOT_FOR_GUESTS) {
-    if (capacity !== CAPACITY_NOT_FOR_GUESTS) {
-      message = `Данное размещение "не для гостей"`
-    };
-  } else if (capacity > roomNumber || capacity === CAPACITY_NOT_FOR_GUESTS) {
-    message = `Выберите значение менее или равно "для ${roomNumber} гостей",  или комнату побольше`;
+  if (roomNumber === roomNotForGuests) {
+    if (capacity !== capacityNotForGuests) {
+      message = 'Данное размещение "не для гостей"';
+    }
+  } else if (capacity > roomNumber || capacity === capacityNotForGuests) {
+    message = 'Выберите количество комнат менее или равноe числу гостей или комнату побольше';
   }
   capacityField.setCustomValidity(message);
 };
 
-export { checkEmptyField, checkValideTitle, checkValidePrice, checkCapacityDefault, checkValideCapacity };
+export { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity };
