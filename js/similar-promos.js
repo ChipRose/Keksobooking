@@ -27,6 +27,7 @@ const getRightRoomGuestWordsForm = (elementsQuantity) => {
   if (elementsQuantity > StepsWordsFormChanged.FIRST && elementsQuantity <= StepsWordsFormChanged.SECOND) {
     formWords = {
       ROOM: 'комнаты',
+      GUEST: 'гостей',
     }
   }
   return formWords;
