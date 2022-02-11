@@ -1,16 +1,18 @@
 import './form.js';
+import './filter-form.js';
 import './map.js';
 import './api.js';
 
 import { setUsualMarkers } from './map.js';
 import { getData } from './api.js';
-import { showAllertMessage, createErrorMessage } from './util/util.js';
-
+import { showAllertMessage, createErrorMessage } from './util/util-message.js';
 import { setPromoFormSubmit, clearForm, setSuccessState, setErrorState } from './form.js';
+import { renderSimilarPromos } from './similar-promos.js';
 
-const PROMO_QUANTITY = 10;
-
-getData((promos) => setUsualMarkers(promos.slice(0, PROMO_QUANTITY)), () => showAllertMessage(createErrorMessage));
+getData(
+  (promos) => setUsualMarkers(promos),
+  () => showAllertMessage(createErrorMessage)
+);
 
 setPromoFormSubmit(setSuccessState, setErrorState);
 clearForm();

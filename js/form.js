@@ -1,5 +1,5 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
-import { createMessage, showMessage } from './util/util.js';
+import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
 import { setMainMarkerDefault } from './map.js';
 
@@ -29,14 +29,14 @@ const CapacityValue = {
 }
 
 const getPrice = (objectType = 'flat') => {
-  const minPrice = {
+  const MinPrice = {
     BUNGALOW: 0,
     FLAT: 1000,
     HOTEL: 3000,
     HOUSE: 5000,
   }
   return {
-    MIN: minPrice[objectType.toUpperCase()],
+    MIN: MinPrice[objectType.toUpperCase()],
     MAX: 1000000,
   }
 };

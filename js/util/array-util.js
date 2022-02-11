@@ -1,6 +1,6 @@
 import { getRandomInt } from './math-util.js';
 
-const getRandomElement = (elements) => {
+const getRandomArrayElement = (elements) => {
   return elements[getRandomInt(0, elements.length - 1)];
 };
 
@@ -30,4 +30,4 @@ const getVariousLengthRandomArray = (arrayElements, size) => {
   return randomArray;
 };
 
-export { getRandomElement, getUniqueIndex, getVariousLengthRandomArray };
+export { getRandomArrayElement, getUniqueIndex, getVariousLengthRandomArray };

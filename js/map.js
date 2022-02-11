@@ -1,7 +1,8 @@
-import { mapLib } from './map-lib.js';
+import { mapLib } from './libraries.js';
 import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress } from './form.js';
+import { comparePromos } from './filter-form.js';
 
 const COORDINATES_DEFAULT = {
   LAT: 35.6894,
@@ -72,8 +73,8 @@ const mapUsualIcon = mapLib.icon({
   popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
-const setUsualMarkers = (similarPromo) => {
-  similarPromo.forEach(({ author, offer, location }) => {
+const setUsualMarkers = (similarPromos) => {
+  similarPromos.slice().slice(0,10).sort(comparePromos).forEach(({author, offer,location}) => {
     const usualMarker = mapLib.marker(
       {
         lat: location.lat,
@@ -83,7 +84,7 @@ const setUsualMarkers = (similarPromo) => {
         icon: mapUsualIcon,
       },
     );
-    usualMarker.addTo(map).bindPopup(renderSimilarPromos({ author, offer, location })),
+    usualMarker.addTo(map).bindPopup(renderSimilarPromos({author, offer,location})),
     {
       keepInView: true,
     };
