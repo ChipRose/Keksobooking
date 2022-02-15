@@ -84,7 +84,6 @@ const renderSimilarPromos = ({ author, offer }) => {
   showAvailableProperties(popupElement.querySelector('.popup__features'), offer.features);
   popupElement.querySelector('.popup__description').textContent = offer.description;
   showAvailableProperties(popupElement.querySelector('.popup__photos'), offer.photos);
-  console.log(popupElement);
   return popupElement;
 };
 

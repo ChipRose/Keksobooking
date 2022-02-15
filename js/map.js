@@ -2,7 +2,7 @@ import { mapLib } from './libraries.js';
 import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress } from './form.js';
-import { comparePromos } from './filter-form.js';
+//import { setObjectFilter } from './filter-form.js';
 
 const COORDINATES_DEFAULT = {
   LAT: 35.6894,
@@ -73,8 +73,32 @@ const mapUsualIcon = mapLib.icon({
   popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
 });
 
+const mapFilterForm = document.querySelector('.map__filters');
+const objectTypeFilterSelect = mapFilterForm.querySelector('[name=housing-type]');
+
+const getPromoRank = (promo) => {
+  const objectTypeFilter = objectTypeFilterSelect.value;
+  let rank = 0;
+  if (promo.offer.type === objectTypeFilter) {
+    rank += 3;
+  }
+  return rank;
+};
+
+const comparePromos = (promoA, promoB) => {
+  const rankA = getPromoRank(promoA);
+  const rankB = getPromoRank(promoB);
+  return (rankB - rankA);
+};
+
+const setObjectFilter = (cb) => {
+  objectTypeFilterSelect.addEventListener('change', () => {
+    cb();
+  });
+}
+
 const setUsualMarkers = (similarPromos) => {
-  similarPromos.slice().slice(0,10).sort(comparePromos).forEach(({author, offer,location}) => {
+  similarPromos.slice().sort(comparePromos).slice(0,10).forEach(({author, offer,location}) => {
     const usualMarker = mapLib.marker(
       {
         lat: location.lat,
@@ -95,4 +119,4 @@ mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-export { setUsualMarkers, setMainMarkerDefault };
+export { setUsualMarkers, setMainMarkerDefault , setObjectFilter};
