@@ -1,9 +1,3 @@
-const PROMO_QUANTITY = 10;
-
-const Default = {
-  OBJECT_TYPE: 'flat',
-};
-
 const RusCompareOfferTypes = {
   FLAT: 'квартира',
   BUNGALOW: 'бунгало',

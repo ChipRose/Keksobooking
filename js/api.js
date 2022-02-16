@@ -1,5 +1,8 @@
+const GET_LINK = 'https://23.javascript.pages.academy/keksobooking/data';
+const POST_LINK = 'https://23.javascript.pages.academy/keksobooking';
+
 const getData = (onSuccess, onError) => {
-  fetch('https://23.javascript.pages.academy/keksobooking/data')
+  fetch(GET_LINK)
     .then((response) => {
       if (response.ok) {
         const promos = response.json();
@@ -13,8 +16,7 @@ const getData = (onSuccess, onError) => {
 };
 
 const sendData = (onSuccess, onError, body) => {
-  fetch(
-    'https://23.javascript.pages.academy/keksobooking',
+  fetch(POST_LINK,
     {
       method: 'POST',
       body,

@@ -161,10 +161,10 @@ const setErrorState = () => {
   showMessage(createMessage(ERROR_MESSAGE_ID, ERROR_MESSAGE_CONTENT), ERROR_BUTTON);
 };
 
-const clearForm = () => {
+const clearForm = (cb) => {
   promoForm.addEventListener('reset', (evt) => {
     evt.preventDefault();
-    setInitialState();
+    cb();
   });
 }
 
