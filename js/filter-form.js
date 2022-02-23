@@ -36,12 +36,14 @@ const compareCallBack = () => {
     const objectTypeFilter = objectTypeFilterSelect.value;
     const objectPriceFilter = objectPriceFilterSelect.value.toUpperCase();
     const objectRoomsFilter = Number(objectRoomsFilterSelect.value);
+    const objectCapacityFilter = Number(objectCapacityFilterSelect.value);
 
     let rank = 0;
 
-    if (offer.type === objectTypeFilter) rank += 3;
-    if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 2;
-    if (offer.rooms === objectRoomsFilter) rank += 1;
+    if (offer.type === objectTypeFilter) rank += 4;
+    if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 3;
+    if (offer.rooms === objectRoomsFilter) rank += 2;
+    if (offer.guests === objectCapacityFilter) rank += 1;
 
     return rank;
   };
@@ -73,6 +75,12 @@ const setObjectRoomsFilter = (cb) => {
   });
 };
 
+const setObjectCapacityFilter = (cb) => {
+  objectCapacityFilterSelect.addEventListener('change', () => {
+    cb();
+  });
+};
+
 const setInitialFilterState = () => {
   objectTypeFilterSelect.value = DEFAULT_FILTER_VALUE;
   objectPriceFilterSelect.value = DEFAULT_FILTER_VALUE;
@@ -81,4 +89,4 @@ const setInitialFilterState = () => {
   setFeaturesDefault(objectFeaturesFilterSet);
 };
 
-export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter };
+export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter };

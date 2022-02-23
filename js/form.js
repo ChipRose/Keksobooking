@@ -1,4 +1,4 @@
-import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
+import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js';
 import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
 

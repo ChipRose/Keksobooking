@@ -2,7 +2,7 @@ import { mapLib } from './libraries.js';
 import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
-import { setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, compareCallBack } from './filter-form.js';
+import { setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, compareCallBack } from './filter-form.js';
 
 const OBJECT_QUANTITY = 10;
 
@@ -112,6 +112,7 @@ const setUsualMarkers = (similarPromos) => {
   setObjectTypeFilter(() => removeMarker(usualMarkers));
   setObjectPriceFilter(() => removeMarker(usualMarkers));
   setObjectRoomsFilter(() => removeMarker(usualMarkers));
+  setObjectCapacityFilter(() => removeMarker(usualMarkers));
   clearForm(() => removeMarker(usualMarkers));
   setPromoFormSubmit(() => removeMarker(usualMarkers));
 };
@@ -132,5 +133,6 @@ mainMarker.on('move', (evt) => {
 setObjectTypeFilter(() => setMapDefault(map));
 setObjectPriceFilter(() => setMapDefault(map));
 setObjectRoomsFilter(() => setMapDefault(map));
+setObjectCapacityFilter(() => setMapDefault(map));
 
 export { setUsualMarkers, setInitialMapState };
