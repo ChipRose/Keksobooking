@@ -116,12 +116,12 @@ const setUsualMarkers = (similarPromos) => {
 
 const removeMarker = (markers) => {
   markers.forEach((marker) => marker.remove());
-}
+};
 
 const setInitialMapState = () => {
   setMapDefault(map);
   setMainMarkerDefault();
-}
+};
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
