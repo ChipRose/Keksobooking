@@ -1,7 +1,8 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
-import { createMessage, showMessage } from './util/util.js';
-import { sendData } from './api.js';
-import { setMainMarkerDefault } from './map.js';
+import { createMessage, showMessage } from './util/util-message.js';
+import { sendData, getData } from './api.js';
+import { setMainMarkerDefault, setUsualMarkers } from './map.js';
+import { setInitialFilterState } from './filter-form.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -29,14 +30,14 @@ const CapacityValue = {
 }
 
 const getPrice = (objectType = 'flat') => {
-  const minPrice = {
+  const MinPrice = {
     BUNGALOW: 0,
     FLAT: 1000,
     HOTEL: 3000,
     HOUSE: 5000,
   }
   return {
-    MIN: minPrice[objectType.toUpperCase()],
+    MIN: MinPrice[objectType.toUpperCase()],
     MAX: 1000000,
   }
 };
@@ -84,8 +85,8 @@ const setCapacityDefault = () => {
   capacitySelect.value = CapacityValue.FOR_ONE;
 };
 
-const setFeaturesDefault = () => {
-  featuresSet.forEach((feature) => {
+const setFeaturesDefault = (features) => {
+  features.forEach((feature) => {
     feature.checked = false;
   });
 };
@@ -102,7 +103,7 @@ const setInitialState = () => {
   setMinPriceDefault();
   setTimeDefault();
   setCapacityDefault();
-  setFeaturesDefault();
+  setFeaturesDefault(featuresSet);
 };
 
 setInitialState();
@@ -139,19 +140,10 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-const setPromoFormSubmit = (onSuccess, onError) => {
-  promoForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const formData = new FormData(evt.target);
-    sendData(() => onSuccess(), () => onError(), formData);
-  });
-};
-
 const setSuccessState = () => {
   const SUCCESS_MESSAGE_ID = 'success';
   const SUCCESS_MESSAGE_CONTENT = 'success';
   showMessage(createMessage(SUCCESS_MESSAGE_ID, SUCCESS_MESSAGE_CONTENT));
-  setInitialState();
 };
 
 const setErrorState = () => {
@@ -161,11 +153,26 @@ const setErrorState = () => {
   showMessage(createMessage(ERROR_MESSAGE_ID, ERROR_MESSAGE_CONTENT), ERROR_BUTTON);
 };
 
-const clearForm = () => {
+const sendPromoForm = (onSuccess, onError) => {
+  const setState = () => {
+    const formData = new FormData(promoForm);
+    sendData(() => onSuccess(), () => onError(), formData);
+  }
+  return setState;
+}
+
+const setPromoFormSubmit = (...callbacks) => {
+  promoForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    callbacks.forEach((cb) => cb());
+  });
+};
+
+const clearForm = (cb) => {
   promoForm.addEventListener('reset', (evt) => {
     evt.preventDefault();
-    setInitialState();
+    cb();
   });
 }
 
-export { setAddress, getPrice, setPromoFormSubmit, clearForm, setSuccessState, setErrorState, setInitialState };
+export { setAddress, getPrice, setFeaturesDefault, setPromoFormSubmit, sendPromoForm, clearForm, setSuccessState, setErrorState, setInitialState };

@@ -19,16 +19,11 @@ const getRightRoomGuestWordsForm = (elementsQuantity) => {
     GUEST: 'гостей',
   };
   if (elementsQuantity === StepsWordsFormChanged.FIRST) {
-    formWords = {
-      ROOM: 'комната',
-      GUEST: 'гостя',
-    }
+    formWords.ROOM = 'комната';
+    formWords.GUEST = 'гостя';
   }
   if (elementsQuantity > StepsWordsFormChanged.FIRST && elementsQuantity <= StepsWordsFormChanged.SECOND) {
-    formWords = {
-      ROOM: 'комнаты',
-      GUEST: 'гостей',
-    }
+    formWords.ROOM = 'комнаты';
   }
   return formWords;
 };
@@ -40,14 +35,17 @@ const createPhraseForAvailableRooms = (roomsQuantity, guestQuantity) => {
 const showOfferPhotos = (parentBlock, availablePhotos) => {
   const photoTemplate = parentBlock.querySelector('.popup__photo');
   const photoFragment = document.createDocumentFragment();
+
   availablePhotos.forEach((photo, index) => {
     let photoItem = photoTemplate;
+
     if (index >= 1) {
       photoItem = photoTemplate.cloneNode(true);
     }
     photoItem.src = photo;
     photoFragment.appendChild(photoItem);
   });
+
   parentBlock.appendChild(photoFragment);
 };
 
@@ -62,11 +60,11 @@ const showOfferFeatures = (parentBlock, availableFeatures) => {
 };
 
 const showAvailableProperties = (parentBlock, availableProperty) => {
-  if(!availableProperty){
+  if (!availableProperty) {
     parentBlock.classList.add('hidden')
-  } else if(parentBlock.classList.contains('popup__photos')){
+  } else if (parentBlock.classList.contains('popup__photos')) {
     showOfferPhotos(parentBlock, availableProperty);
-  } else if(parentBlock.classList.contains('popup__features')){
+  } else if (parentBlock.classList.contains('popup__features')) {
     showOfferFeatures(parentBlock, availableProperty);
   }
 };
@@ -85,6 +83,5 @@ const renderSimilarPromos = ({ author, offer }) => {
   showAvailableProperties(popupElement.querySelector('.popup__photos'), offer.photos);
   return popupElement;
 };
-
 
 export { renderSimilarPromos, getRightRoomGuestWordsForm };

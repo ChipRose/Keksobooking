@@ -1,15 +1,18 @@
-import { mapLib } from './map-lib.js';
+import { mapLib } from './libraries.js';
 import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
-import { setAddress } from './form.js';
+import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
+import { setObjectFilter, compareCallBack } from './filter-form.js';
 
-const COORDINATES_DEFAULT = {
+const OBJECT_QUANTITY = 10;
+
+const CoordinatesDefault = {
   LAT: 35.6894,
   LNG: 139.692,
   ZOOM: 12,
 };
 
-const MARKER_SIZES = {
+const MarkerSizes = {
   MAIN: {
     X: 52,
     Y: 52,
@@ -24,33 +27,35 @@ const mapCanvas = document.querySelector('#map-canvas');
 
 setInactiveState();
 
-const map = mapLib.map(mapCanvas)
+const map = mapLib.map(mapCanvas,
+  {
+    scrollWheelZoom: false,
+  })
   .on('load', () => {
     setActiveState();
   })
   .setView({
-    lat: COORDINATES_DEFAULT.LAT,
-    lng: COORDINATES_DEFAULT.LNG,
-  }, COORDINATES_DEFAULT.ZOOM);
+    lat: CoordinatesDefault.LAT,
+    lng: CoordinatesDefault.LNG,
+  }, CoordinatesDefault.ZOOM);
 
 mapLib.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+  }).addTo(map);
 
 const mapMainIcon = mapLib.icon({
   iconUrl: '../img/pin/main-pin.svg',
-  iconSize: [MARKER_SIZES.MAIN.X, MARKER_SIZES.MAIN.Y],
-  iconAnchor: [MARKER_SIZES.MAIN.X / 2, MARKER_SIZES.MAIN.Y],
-  popupAnchor: [0, -MARKER_SIZES.MAIN.Y / 2],
+  iconSize: [MarkerSizes.MAIN.X, MarkerSizes.MAIN.Y],
+  iconAnchor: [MarkerSizes.MAIN.X / 2, MarkerSizes.MAIN.Y],
+  popupAnchor: [0, -MarkerSizes.MAIN.Y / 2],
 });
 
 const mainMarker = mapLib.marker(
   {
-    lat: COORDINATES_DEFAULT.LAT,
-    lng: COORDINATES_DEFAULT.LNG,
+    lat: CoordinatesDefault.LAT,
+    lng: CoordinatesDefault.LNG,
   },
   {
     draggable: true,
@@ -59,21 +64,24 @@ const mainMarker = mapLib.marker(
 );
 
 const setMainMarkerDefault = () => {
-  mainMarker.setLatLng([COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG]);
-  setAddress(COORDINATES_DEFAULT.LAT, COORDINATES_DEFAULT.LNG);
+  mainMarker.setLatLng([CoordinatesDefault.LAT, CoordinatesDefault.LNG]);
+  setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
 };
 
 mainMarker.addTo(map);
 
 const mapUsualIcon = mapLib.icon({
   iconUrl: '../img/pin/pin.svg',
-  iconSize: [MARKER_SIZES.USUAL.X, MARKER_SIZES.USUAL.Y],
-  iconAnchor: [MARKER_SIZES.USUAL.X / 2, MARKER_SIZES.USUAL.Y],
-  popupAnchor: [0, -MARKER_SIZES.USUAL.Y / 2],
+  iconSize: [MarkerSizes.USUAL.X, MarkerSizes.USUAL.Y],
+  iconAnchor: [MarkerSizes.USUAL.X / 2, MarkerSizes.USUAL.Y],
+  popupAnchor: [0, -MarkerSizes.USUAL.Y / 2],
 });
 
-const setUsualMarkers = (similarPromo) => {
-  similarPromo.forEach(({ author, offer, location }) => {
+const setUsualMarkers = (similarPromos) => {
+  const usualMarkers = [];
+  const popupInfo = [];
+
+  similarPromos.slice().sort(compareCallBack()).slice(0, OBJECT_QUANTITY).forEach(({ author, offer, location }) => {
     const usualMarker = mapLib.marker(
       {
         lat: location.lat,
@@ -83,12 +91,25 @@ const setUsualMarkers = (similarPromo) => {
         icon: mapUsualIcon,
       },
     );
-    usualMarker.addTo(map).bindPopup(renderSimilarPromos({ author, offer, location })),
+
+    usualMarkers.push(usualMarker);
+    popupInfo.push(renderSimilarPromos({ author, offer, location }));
+  });
+
+  usualMarkers.forEach((marker, index) => {
+    marker.addTo(map).bindPopup(popupInfo[index]),
     {
       keepInView: true,
     };
-  });
+  })
+  setObjectFilter(() => removeMarker(usualMarkers));
+  clearForm(() => removeMarker(usualMarkers));
+  setPromoFormSubmit(() => removeMarker(usualMarkers));
 };
+
+const removeMarker = (markers) => {
+  markers.forEach((marker) => marker.remove());
+}
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
