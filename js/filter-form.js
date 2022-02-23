@@ -1,4 +1,3 @@
-import { clearForm } from './form.js';
 import { setFeaturesDefault } from './form.js';
 
 const DEFAULT_FILTER_VALUE = 'any';
@@ -45,7 +44,5 @@ const setInitialFilterState = () => {
   objectCapacityFilterSelect.value = DEFAULT_FILTER_VALUE;
   setFeaturesDefault(objectFeaturesFilterSet);
 };
-
-clearForm(setInitialFilterState);
 
 export { setObjectFilter, compareCallBack, setInitialFilterState };

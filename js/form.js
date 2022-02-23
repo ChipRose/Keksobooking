@@ -1,12 +1,20 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js'
 import { createMessage, showMessage } from './util/util-message.js';
-import { sendData, getData } from './api.js';
-import { setMainMarkerDefault, setUsualMarkers } from './map.js';
-import { setInitialFilterState } from './filter-form.js';
+import { sendData } from './api.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
 const FIELD_TIMEOUT_ID = 'timeout';
+
+const RoomsValue = {
+  FOR_ONE: '1',
+  NOT_FOR_GUESTS: '100',
+};
+
+const CapacityValue = {
+  FOR_ONE: '1',
+  NOT_FOR_GUESTS: '0',
+};
 
 const promoForm = document.querySelector('.ad-form');
 const promoTitleInput = promoForm.querySelector('#title');
@@ -19,15 +27,6 @@ const capacitySelect = promoForm.querySelector('#capacity');
 const featuresSet = promoForm.querySelectorAll('.feature__checkbox');
 const descriptionTextArea = promoForm.querySelector('#description');
 
-const RoomsValue = {
-  FOR_ONE: '1',
-  NOT_FOR_GUESTS: '100',
-};
-
-const CapacityValue = {
-  FOR_ONE: '1',
-  NOT_FOR_GUESTS: '0',
-}
 
 const getPrice = (objectType = 'flat') => {
   const MinPrice = {
@@ -97,16 +96,15 @@ const clearField = (fields) => {
   })
 };
 
-const setInitialState = () => {
+const setInitialFormState = () => {
   clearField([promoTitleInput, promoPriceInput, descriptionTextArea]);
-  setMainMarkerDefault();
   setMinPriceDefault();
   setTimeDefault();
   setCapacityDefault();
   setFeaturesDefault(featuresSet);
 };
 
-setInitialState();
+setInitialFormState();
 
 const checkCapacity = (roomNumber) => {
   checkValideCapacity(capacitySelect, CapacityValue.NOT_FOR_GUESTS, roomNumber, RoomsValue.NOT_FOR_GUESTS);
@@ -168,11 +166,11 @@ const setPromoFormSubmit = (...callbacks) => {
   });
 };
 
-const clearForm = (cb) => {
+const clearForm = (...callbacks) => {
   promoForm.addEventListener('reset', (evt) => {
     evt.preventDefault();
-    cb();
+    callbacks.forEach((cb) => cb());
   });
 }
 
-export { setAddress, getPrice, setFeaturesDefault, setPromoFormSubmit, sendPromoForm, clearForm, setSuccessState, setErrorState, setInitialState };
+export { setAddress, getPrice, setFeaturesDefault, setPromoFormSubmit, sendPromoForm, clearForm, setSuccessState, setErrorState, setInitialFormState };
