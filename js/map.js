@@ -43,6 +43,7 @@ const setMapDefault = (map) => {
 }
 
 setMapDefault(map);
+setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
 
 mapLib.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
