@@ -35,11 +35,13 @@ const compareCallBack = () => {
     const { offer } = promo;
     const objectTypeFilter = objectTypeFilterSelect.value;
     const objectPriceFilter = objectPriceFilterSelect.value.toUpperCase();
+    const objectRoomsFilter = Number(objectRoomsFilterSelect.value);
 
     let rank = 0;
 
     if (offer.type === objectTypeFilter) rank += 3;
     if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 2;
+    if (offer.rooms === objectRoomsFilter) rank += 1;
 
     return rank;
   };
@@ -65,6 +67,12 @@ const setObjectPriceFilter = (cb) => {
   });
 };
 
+const setObjectRoomsFilter = (cb) => {
+  objectRoomsFilterSelect.addEventListener('change', () => {
+    cb();
+  });
+};
+
 const setInitialFilterState = () => {
   objectTypeFilterSelect.value = DEFAULT_FILTER_VALUE;
   objectPriceFilterSelect.value = DEFAULT_FILTER_VALUE;
@@ -73,4 +81,4 @@ const setInitialFilterState = () => {
   setFeaturesDefault(objectFeaturesFilterSet);
 };
 
-export { setObjectTypeFilter, setObjectPriceFilter, compareCallBack, setInitialFilterState };
+export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter };
