@@ -35,14 +35,17 @@ const createPhraseForAvailableRooms = (roomsQuantity, guestQuantity) => {
 const showOfferPhotos = (parentBlock, availablePhotos) => {
   const photoTemplate = parentBlock.querySelector('.popup__photo');
   const photoFragment = document.createDocumentFragment();
+
   availablePhotos.forEach((photo, index) => {
     let photoItem = photoTemplate;
+
     if (index >= 1) {
       photoItem = photoTemplate.cloneNode(true);
     }
     photoItem.src = photo;
     photoFragment.appendChild(photoItem);
   });
+
   parentBlock.appendChild(photoFragment);
 };
 

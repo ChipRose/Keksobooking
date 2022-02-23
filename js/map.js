@@ -1,11 +1,10 @@
 import { mapLib } from './libraries.js';
 import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
-import { setAddress } from './form.js';
+import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
+import { setObjectFilter, compareCallBack } from './filter-form.js';
 
 const OBJECT_QUANTITY = 10;
-
-const DEFAULT_FILTER_VALUE = 'any';
 
 const CoordinatesDefault = {
   LAT: 35.6894,
@@ -25,8 +24,6 @@ const MarkerSizes = {
 };
 
 const mapCanvas = document.querySelector('#map-canvas');
-const mapFilterForm = document.querySelector('.map__filters');
-const objectTypeFilterSelect = mapFilterForm.querySelector('[name=housing-type]');
 
 setInactiveState();
 
@@ -80,33 +77,11 @@ const mapUsualIcon = mapLib.icon({
   popupAnchor: [0, -MarkerSizes.USUAL.Y / 2],
 });
 
-const getPromoRank = (promo) => {
-  const objectTypeFilter = objectTypeFilterSelect.value;
-  let rank = 0;
-  if (promo.offer.type === objectTypeFilter) {
-    rank += 3;
-  }
-
-  return rank;
-};
-
-const comparePromos = (promoA, promoB) => {
-  const rankA = getPromoRank(promoA);
-  const rankB = getPromoRank(promoB);
-  return (rankB - rankA);
-};
-
-const setObjectFilter = (cb) => {
-  objectTypeFilterSelect.addEventListener('change', () => {
-    cb();
-  });
-};
-
 const setUsualMarkers = (similarPromos) => {
   const usualMarkers = [];
   const popupInfo = [];
 
-  similarPromos.slice().sort(comparePromos).slice(0, OBJECT_QUANTITY).forEach(({ author, offer, location }) => {
+  similarPromos.slice().sort(compareCallBack()).slice(0, OBJECT_QUANTITY).forEach(({ author, offer, location }) => {
     const usualMarker = mapLib.marker(
       {
         lat: location.lat,
@@ -116,6 +91,7 @@ const setUsualMarkers = (similarPromos) => {
         icon: mapUsualIcon,
       },
     );
+
     usualMarkers.push(usualMarker);
     popupInfo.push(renderSimilarPromos({ author, offer, location }));
   });
@@ -126,16 +102,17 @@ const setUsualMarkers = (similarPromos) => {
       keepInView: true,
     };
   })
-
-  setObjectFilter(() => usualMarkers.forEach((marker) => marker.remove()));
+  setObjectFilter(() => removeMarker(usualMarkers));
+  clearForm(() => removeMarker(usualMarkers));
+  setPromoFormSubmit(() => removeMarker(usualMarkers));
 };
+
+const removeMarker = (markers) => {
+  markers.forEach((marker) => marker.remove());
+}
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-const setInitialFilterState = () => {
-  objectTypeFilterSelect.value = DEFAULT_FILTER_VALUE;
-}
-
-export { setUsualMarkers, setMainMarkerDefault, setObjectFilter, setInitialFilterState };
+export { setUsualMarkers, setMainMarkerDefault };
