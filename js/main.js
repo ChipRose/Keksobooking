@@ -8,7 +8,7 @@ import { setUsualMarkers, setInitialMapState } from './map.js';
 import { getData } from './api.js';
 import { showAllertMessage, createErrorMessage } from './util/util-message.js';
 import { setPromoFormSubmit, clearForm, sendPromoForm, setSuccessState, setErrorState, setInitialFormState } from './form.js';
-import { setInitialFilterState, setObjectFilter } from './filter-form.js';
+import { setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter } from './filter-form.js';
 import { debounceLib } from './libraries.js';
 
 const RERENDER_DELAY = 500;
@@ -17,7 +17,8 @@ getData(
   (promos) => {
     setUsualMarkers(promos);
     setPromoFormSubmit(() => setUsualMarkers(promos));
-    setObjectFilter(debounceLib(() => setUsualMarkers(promos), RERENDER_DELAY));
+    setObjectTypeFilter(debounceLib(() => setUsualMarkers(promos), RERENDER_DELAY));
+    setObjectPriceFilter(debounceLib(() => setUsualMarkers(promos),RERENDER_DELAY));
     clearForm(() => setUsualMarkers(promos));
   },
 

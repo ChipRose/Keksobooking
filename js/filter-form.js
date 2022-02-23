@@ -9,15 +9,37 @@ const objectRoomsFilterSelect = mapFilterForm.querySelector('[name=housing-rooms
 const objectCapacityFilterSelect = mapFilterForm.querySelector('[name=housing-guests]');
 const objectFeaturesFilterSet = mapFilterForm.querySelectorAll('.map__checkbox');
 
+const PriceRange = {
+  ANY: {
+    MIN: 0,
+    MAX: 1000000,
+  },
+  MIDDLE: {
+    MIN: 10000,
+    MAX: 50000,
+  },
+  LOW: {
+    MIN: 0,
+    MAX: 10000,
+  },
+  HIGH: {
+    MIN: 50000,
+    MAX: 1000000,
+  },
+};
+
 const compareCallBack = () => {
 
   const getPromoRank = (promo) => {
+
+    const { offer } = promo;
     const objectTypeFilter = objectTypeFilterSelect.value;
+    const objectPriceFilter = objectPriceFilterSelect.value.toUpperCase();
+
     let rank = 0;
 
-    if (promo.offer.type === objectTypeFilter) {
-      rank += 3;
-    }
+    if (offer.type === objectTypeFilter) rank += 3;
+    if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 2;
 
     return rank;
   };
@@ -31,8 +53,14 @@ const compareCallBack = () => {
   return comparePromos;
 };
 
-const setObjectFilter = (cb) => {
+const setObjectTypeFilter = (cb) => {
   objectTypeFilterSelect.addEventListener('change', () => {
+    cb();
+  });
+};
+
+const setObjectPriceFilter = (cb) => {
+  objectPriceFilterSelect.addEventListener('change', () => {
     cb();
   });
 };
@@ -45,4 +73,4 @@ const setInitialFilterState = () => {
   setFeaturesDefault(objectFeaturesFilterSet);
 };
 
-export { setObjectFilter, compareCallBack, setInitialFilterState };
+export { setObjectTypeFilter, setObjectPriceFilter, compareCallBack, setInitialFilterState };
