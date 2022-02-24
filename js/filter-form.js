@@ -7,7 +7,8 @@ const objectTypeFilterSelect = mapFilterForm.querySelector('[name=housing-type]'
 const objectPriceFilterSelect = mapFilterForm.querySelector('[name=housing-price]');
 const objectRoomsFilterSelect = mapFilterForm.querySelector('[name=housing-rooms]');
 const objectCapacityFilterSelect = mapFilterForm.querySelector('[name=housing-guests]');
-const objectFeaturesFilterSet = mapFilterForm.querySelectorAll('.map__checkbox');
+const objectFeaturesFilter = mapFilterForm.querySelector('.map__features');
+const objectFeaturesFilterSet = objectFeaturesFilter.querySelectorAll('.map__checkbox');
 
 const PriceRange = {
   ANY: {
@@ -37,6 +38,7 @@ const compareCallBack = () => {
     const objectPriceFilter = objectPriceFilterSelect.value.toUpperCase();
     const objectRoomsFilter = Number(objectRoomsFilterSelect.value);
     const objectCapacityFilter = Number(objectCapacityFilterSelect.value);
+    const checkedFeatures = objectFeaturesFilter.querySelectorAll('.map__checkbox:checked');
 
     let rank = 0;
 
@@ -44,6 +46,9 @@ const compareCallBack = () => {
     if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 3;
     if (offer.rooms === objectRoomsFilter) rank += 2;
     if (offer.guests === objectCapacityFilter) rank += 1;
+    checkedFeatures.forEach((feature)=>{
+      if(feature.value.includes(offer.features)) rank +=1;
+    })
 
     return rank;
   };
@@ -81,6 +86,12 @@ const setObjectCapacityFilter = (cb) => {
   });
 };
 
+const setObjectFeaturesFilter = (...callbacks) => {
+  objectFeaturesFilter.addEventListener('change', () => {
+    callbacks.forEach((cb) => cb());
+  });
+};
+
 const setInitialFilterState = () => {
   objectTypeFilterSelect.value = DEFAULT_FILTER_VALUE;
   objectPriceFilterSelect.value = DEFAULT_FILTER_VALUE;
@@ -89,4 +100,4 @@ const setInitialFilterState = () => {
   setFeaturesDefault(objectFeaturesFilterSet);
 };
 
-export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter };
+export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, setObjectFeaturesFilter };

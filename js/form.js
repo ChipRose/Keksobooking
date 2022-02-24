@@ -85,9 +85,11 @@ const setCapacityDefault = () => {
 };
 
 const setFeaturesDefault = (features) => {
-  features.forEach((feature) => {
-    feature.checked = false;
-  });
+  if (features) {
+    features.forEach((feature) => {
+      feature.checked = false;
+    });
+  }
 };
 
 const clearField = (fields) => {
