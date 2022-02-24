@@ -6,34 +6,6 @@ const avatarPreview = promoForm.querySelector('.ad-form-header__preview');
 const photoInput = promoForm.querySelector('.ad-form__input');
 const photoPreview = promoForm.querySelector('.ad-form__photo');
 
-/* avatarInput.addEventListener('change', () => {
-  const file = avatarInput.files[0];
-  const fileName = file.name.toLowerCase();
-
-  const matches = FILE_TYPES.some((extension) => {
-    return fileName.endsWith(extension)
-  });
-
-  avatarPreviewContainer.innerHTML = '';
-
-  if (matches) {
-    const reader = new FileReader();
-
-    reader.addEventListener('load', () => {
-      const avatar = document.createElement('img');
-      avatarPreviewContainer.style.width = '200px';
-      avatarPreviewContainer.style.height = '70px';
-      avatarPreviewContainer.style.justifyContent = 'center';
-      avatarPreviewContainer.style.padding = '0';
-      avatarPreviewContainer.style.overflow = 'hidden';
-      avatar.src = reader.result;
-      avatarPreviewContainer.appendChild(avatar);
-    });
-
-    reader.readAsDataURL(file);
-  }
-}); */
-
 avatarInput.addEventListener('change', () => {
   setImagePreview(avatarInput, avatarPreview);
 });
