@@ -55,7 +55,7 @@ const showOfferFeatures = (parentBlock, availableFeatures) => {
   if(availableFeatures) {
     availableFeatures.forEach((feature) => {
       let item = document.createElement('li');
-      item.classList.add(`popup__feature`);
+      item.classList.add('popup__feature');
       item.classList.add(`popup__feature--${feature}`);
       parentBlock.appendChild(item);
     })

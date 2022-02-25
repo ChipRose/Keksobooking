@@ -54,13 +54,6 @@ const compareCallBack = () => {
       })
     }
 
-    // if (checkedFeaturesArray) {
-    //   checkedFeaturesArray.forEach((feature) => {
-    //     if (objectFeatures.indexOf(feature)>0) rank += 1;
-    //   })
-    // }
-
-
     return rank;
   };
 
