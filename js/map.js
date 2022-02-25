@@ -2,7 +2,7 @@ import { mapLib } from './libraries.js';
 import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
-import { setObjectFilter, compareCallBack } from './filter-form.js';
+import { setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, setObjectFeaturesFilter, compareCallBack } from './filter-form.js';
 
 const OBJECT_QUANTITY = 10;
 
@@ -33,11 +33,17 @@ const map = mapLib.map(mapCanvas,
   })
   .on('load', () => {
     setActiveState();
-  })
-  .setView({
+  });
+
+const setMapDefault = (map) => {
+  map.setView({
     lat: CoordinatesDefault.LAT,
     lng: CoordinatesDefault.LNG,
   }, CoordinatesDefault.ZOOM);
+}
+
+setMapDefault(map);
+setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
 
 mapLib.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -102,17 +108,33 @@ const setUsualMarkers = (similarPromos) => {
       keepInView: true,
     };
   })
-  setObjectFilter(() => removeMarker(usualMarkers));
+
+  setObjectTypeFilter(() => removeMarker(usualMarkers));
+  setObjectPriceFilter(() => removeMarker(usualMarkers));
+  setObjectRoomsFilter(() => removeMarker(usualMarkers));
+  setObjectCapacityFilter(() => removeMarker(usualMarkers));
+  setObjectFeaturesFilter(() => removeMarker(usualMarkers));
   clearForm(() => removeMarker(usualMarkers));
   setPromoFormSubmit(() => removeMarker(usualMarkers));
 };
 
 const removeMarker = (markers) => {
   markers.forEach((marker) => marker.remove());
-}
+};
+
+const setInitialMapState = () => {
+  setMapDefault(map);
+  setMainMarkerDefault();
+};
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-export { setUsualMarkers, setMainMarkerDefault };
+setObjectTypeFilter(() => setMapDefault(map));
+setObjectPriceFilter(() => setMapDefault(map));
+setObjectRoomsFilter(() => setMapDefault(map));
+setObjectCapacityFilter(() => setMapDefault(map));
+setObjectFeaturesFilter(() => setMapDefault(map));
+
+export { setUsualMarkers, setInitialMapState };

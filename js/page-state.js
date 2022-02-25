@@ -16,7 +16,6 @@ const setInactiveState = () => {
   setElementsDisabled(mapFiltersFormElements);
 };
 
-
 const setActiveState = () => {
   const setElementsActive = (elements) => {
     for (let element of elements) {
