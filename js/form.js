@@ -168,10 +168,10 @@ const setPromoFormSubmit = (...callbacks) => {
   });
 };
 
-const clearForm = (cb) => {
+const clearForm = (...callbacks) => {
   promoForm.addEventListener('reset', (evt) => {
     evt.preventDefault();
-    cb();
+    callbacks.forEach((cb) => cb());
   });
 }
 

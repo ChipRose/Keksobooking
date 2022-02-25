@@ -1,6 +1,7 @@
 const FILE_TYPES = ['.gif', '.jpg', '.jpeg', '.png'];
 
 const promoForm = document.querySelector('.ad-form');
+const avatarImageDefault = promoForm.querySelector('.ad-form-header__preview img');
 const avatarInput = promoForm.querySelector('.ad-form-header__input');
 const avatarPreview = promoForm.querySelector('.ad-form-header__preview');
 const photoInput = promoForm.querySelector('.ad-form__input');
@@ -32,6 +33,7 @@ const setImagePreview = (inputField, previewField) => {
       image.src = reader.result;
       previewField.appendChild(image);
       previewField.style.padding = '0';
+      previewField.style.flexShrink = '0';
       previewField.style.display = 'flex';
       previewField.style.justifyContent = 'center';
       previewField.style.alignItems = 'center';
@@ -40,4 +42,12 @@ const setImagePreview = (inputField, previewField) => {
 
     reader.readAsDataURL(file);
   }
-}
+};
+
+const setDefaultPreview = () => {
+  avatarPreview.innerHTML = '';
+  avatarPreview.appendChild(avatarImageDefault);
+  photoPreview.innerHTML = '';
+};
+
+export { setDefaultPreview };

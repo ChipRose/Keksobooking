@@ -9,6 +9,7 @@ import { getData } from './api.js';
 import { showAllertMessage, createErrorMessage } from './util/util-message.js';
 import { setPromoFormSubmit, clearForm, sendPromoForm, setSuccessState, setErrorState, setInitialState } from './form.js';
 import { setInitialFilterState, setObjectFilter } from './filter-form.js';
+import {setDefaultPreview} from './images-preview.js';
 
 getData(
   (promos) => {
@@ -21,5 +22,5 @@ getData(
   () => showAllertMessage(createErrorMessage),
 );
 
-setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState),setInitialState, setInitialFilterState);
-clearForm(setInitialState);
+setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState),setInitialState, setInitialFilterState, setDefaultPreview);
+clearForm(setInitialState, setDefaultPreview);
