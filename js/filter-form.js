@@ -39,6 +39,8 @@ const compareCallBack = () => {
     const objectRoomsFilter = Number(objectRoomsFilterSelect.value);
     const objectCapacityFilter = Number(objectCapacityFilterSelect.value);
     const checkedFeatures = objectFeaturesFilter.querySelectorAll('.map__checkbox:checked');
+    const checkedFeaturesArray = [];
+    checkedFeatures.forEach((feature) => checkedFeaturesArray.push(feature.value));
 
     let rank = 0;
 
@@ -46,9 +48,18 @@ const compareCallBack = () => {
     if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 3;
     if (offer.rooms === objectRoomsFilter) rank += 2;
     if (offer.guests === objectCapacityFilter) rank += 1;
-    checkedFeatures.forEach((feature)=>{
-      if(feature.value.includes(offer.features)) rank +=1;
-    })
+    if(offer.features) {
+      checkedFeaturesArray.forEach((feature)=>{
+        if(offer.features.includes(feature)) rank+=1;
+      })
+    }
+
+    // if (checkedFeaturesArray) {
+    //   checkedFeaturesArray.forEach((feature) => {
+    //     if (objectFeatures.indexOf(feature)>0) rank += 1;
+    //   })
+    // }
+
 
     return rank;
   };

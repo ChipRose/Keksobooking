@@ -50,13 +50,17 @@ const showOfferPhotos = (parentBlock, availablePhotos) => {
 };
 
 const showOfferFeatures = (parentBlock, availableFeatures) => {
-  const allFeatures = parentBlock.querySelectorAll('.popup__feature');
-  allFeatures.forEach((element) => {
-    element.classList.add('hidden');
-  })
-  availableFeatures.forEach((feature) => {
-    parentBlock.querySelector(`.popup__feature--${feature}`).classList.remove('hidden');
-  })
+  parentBlock.innerHTML = '';
+
+  if(availableFeatures) {
+    availableFeatures.forEach((feature) => {
+      let item = document.createElement('li');
+      item.classList.add(`popup__feature`);
+      item.classList.add(`popup__feature--${feature}`);
+      parentBlock.appendChild(item);
+    })
+  }
+
 };
 
 const showAvailableProperties = (parentBlock, availableProperty) => {
@@ -69,7 +73,8 @@ const showAvailableProperties = (parentBlock, availableProperty) => {
   }
 };
 
-const renderSimilarPromos = ({ author, offer }) => {
+const renderSimilarPromos = (promo) => {
+  const { author, offer } = promo;
   const popupElement = promoTemplate.cloneNode(true);
   popupElement.querySelector('.popup__avatar').src = author.avatar;
   popupElement.querySelector('.popup__title').textContent = offer.title;
@@ -78,7 +83,7 @@ const renderSimilarPromos = ({ author, offer }) => {
   popupElement.querySelector('.popup__type').textContent = RusCompareOfferTypes[offer.type.toUpperCase()];
   popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   popupElement.querySelector('.popup__text--capacity').textContent = createPhraseForAvailableRooms(offer.rooms, offer.guests);
-  showAvailableProperties(popupElement.querySelector('.popup__features'), offer.features);
+  showOfferFeatures(popupElement.querySelector('.popup__features'), offer.features);
   popupElement.querySelector('.popup__description').textContent = offer.description;
   showAvailableProperties(popupElement.querySelector('.popup__photos'), offer.photos);
   return popupElement;
