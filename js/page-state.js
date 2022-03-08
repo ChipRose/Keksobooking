@@ -1,32 +1,53 @@
-const newOfferForm = document.querySelector('.ad-form');
-const newOfferFormElements = newOfferForm.querySelectorAll('.ad-form__element');
-const mapFiltersForm = document.querySelector('.map__filters');
-const mapFiltersFormElements = mapFiltersForm.querySelectorAll('.map__filter');
-
-const setInactiveState = () => {
-  const setElementsDisabled = (elements) => {
-    for (let element of elements) {
-      element.disabled = true;
-    }
-  };
-
-  newOfferForm.classList.add('ad-form--disabled');
-  mapFiltersForm.classList.add('map__filters--disabled');
-  setElementsDisabled(newOfferFormElements);
-  setElementsDisabled(mapFiltersFormElements);
+const FormElementsStates = {
+  ACTIVE: false,
+  INACTIVE: true,
 };
 
-const setActiveState = () => {
-  const setElementsActive = (elements) => {
-    for (let element of elements) {
-      element.disabled = false;
-    }
-  };
-
-  newOfferForm.classList.remove('ad-form--disabled');
-  mapFiltersForm.classList.remove('map__filters--disabled');
-  setElementsActive(newOfferFormElements);
-  setElementsActive(mapFiltersFormElements);
+const FormClasses = {
+  OFFER_FORM: {
+    FORM: 'ad-form',
+    ELEMENTS: 'ad-form__element',
+    DISABLED: 'ad-form--disabled',
+  },
+  MAP_FILTER: {
+    FORM: 'map__filters',
+    ELEMENTS: 'map__filter',
+    DISABLED: 'map__filters--disabled',
+  },
+  STATE: {
+    ACTIVE: 'ACTIVE',
+    INACTIVE: 'INACTIVE',
+  },
 };
 
-export { setInactiveState, setActiveState };
+const setElementsState = (elements, state) => {
+  elements.forEach((element) => {
+    element.disabled = state;
+  })
+};
+
+const setFormState = (form, state) => {
+  const {FORM, ELEMENTS, DISABLED} = form;
+  const parentForm = document.querySelector(`.${FORM}`);
+  const formElements = parentForm.querySelectorAll(`.${ELEMENTS}`);
+  parentForm.classList.toggle(DISABLED);
+  setElementsState(formElements, FormElementsStates[state]);
+}
+
+const setInactiveFilterState = () => {
+  setFormState(FormClasses.MAP_FILTER, FormClasses.INACTIVE);
+};
+
+const setActiveFilterState = () => {
+  setFormState(FormClasses.MAP_FILTER, FormClasses.ACTIVE);
+};
+
+const setInactiveOfferFormState = () => {
+  setFormState(FormClasses.OFFER_FORM, FormClasses.INACTIVE);
+};
+
+const setActiveOfferFormState = () => {
+  setFormState(FormClasses.OFFER_FORM, FormClasses.ACTIVE);
+};
+
+export { setInactiveFilterState, setActiveFilterState, setInactiveOfferFormState, setActiveOfferFormState };

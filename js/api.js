@@ -1,3 +1,5 @@
+import { setInactiveFilterState } from './page-state.js';
+
 const GET_LINK = 'https://23.javascript.pages.academy/keksobooking/data';
 const POST_LINK = 'https://23.javascript.pages.academy/keksobooking';
 
@@ -8,7 +10,8 @@ const getData = (onSuccess, onError) => {
         const promos = response.json();
         return promos;
       } else {
-        onError()
+        onError();
+        setInactiveFilterState();
       }
     })
     .then((promos) => onSuccess(promos))

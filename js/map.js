@@ -1,8 +1,8 @@
 import { mapLib } from './libraries.js';
-import { setInactiveState, setActiveState } from './page-state.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
 import { setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, setObjectFeaturesFilter, compareCallBack } from './filter-form.js';
+import { setInactiveFilterState, setActiveFilterState, setInactiveOfferFormState, setActiveOfferFormState } from './page-state.js';
 
 const OBJECT_QUANTITY = 10;
 
@@ -25,14 +25,16 @@ const MarkerSizes = {
 
 const mapCanvas = document.querySelector('#map-canvas');
 
-setInactiveState();
+setInactiveOfferFormState();
+setInactiveFilterState();
 
 const map = mapLib.map(mapCanvas,
   {
     scrollWheelZoom: false,
   })
   .on('load', () => {
-    setActiveState();
+    setActiveOfferFormState();
+    setActiveFilterState();
   });
 
 const setMapDefault = (map) => {
