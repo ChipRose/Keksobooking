@@ -37,16 +37,6 @@ const map = mapLib.map(mapCanvas,
     setActiveFilterState();
   });
 
-const setMapDefault = (map) => {
-  map.setView({
-    lat: CoordinatesDefault.LAT,
-    lng: CoordinatesDefault.LNG,
-  }, CoordinatesDefault.ZOOM);
-}
-
-setMapDefault(map);
-setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
-
 mapLib.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -71,12 +61,14 @@ const mainMarker = mapLib.marker(
   },
 );
 
-const setMainMarkerDefault = () => {
-  mainMarker.setLatLng([CoordinatesDefault.LAT, CoordinatesDefault.LNG]);
-  setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
-};
-
 mainMarker.addTo(map);
+
+const setMapDefault = () => {
+  map.setView({
+    lat: CoordinatesDefault.LAT,
+    lng: CoordinatesDefault.LNG,
+  }, CoordinatesDefault.ZOOM);
+};
 
 const mapUsualIcon = mapLib.icon({
   iconUrl: '../img/pin/pin.svg',
@@ -89,7 +81,8 @@ const setUsualMarkers = (similarPromos) => {
   const usualMarkers = [];
   const popupInfo = [];
 
-  similarPromos.slice().sort(compareCallBack()).slice(0, OBJECT_QUANTITY).forEach(({ author, offer, location }) => {
+  similarPromos.slice().sort(compareCallBack()).slice(0, OBJECT_QUANTITY).forEach((promo) => {
+    const { location } = promo;
     const usualMarker = mapLib.marker(
       {
         lat: location.lat,
@@ -101,7 +94,7 @@ const setUsualMarkers = (similarPromos) => {
     );
 
     usualMarkers.push(usualMarker);
-    popupInfo.push(renderSimilarPromos({ author, offer, location }));
+    popupInfo.push(renderSimilarPromos(promo));
   });
 
   usualMarkers.forEach((marker, index) => {
@@ -120,23 +113,29 @@ const setUsualMarkers = (similarPromos) => {
   setPromoFormSubmit(() => removeMarker(usualMarkers));
 };
 
-const removeMarker = (markers) => {
-  markers.forEach((marker) => marker.remove());
+const setMainMarkerDefault = () => {
+  mainMarker.setLatLng([CoordinatesDefault.LAT, CoordinatesDefault.LNG]);
+  setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
 };
 
+const setAddressDefault = () => {
+  setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
+}
+
 const setInitialMapState = () => {
-  setMapDefault(map);
+  setMapDefault();
   setMainMarkerDefault();
+  setAddressDefault();
+};
+
+setInitialMapState();
+
+const removeMarker = (markers) => {
+  markers.forEach((marker) => marker.remove());
 };
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-setObjectTypeFilter(() => setMapDefault(map));
-setObjectPriceFilter(() => setMapDefault(map));
-setObjectRoomsFilter(() => setMapDefault(map));
-setObjectCapacityFilter(() => setMapDefault(map));
-setObjectFeaturesFilter(() => setMapDefault(map));
-
-export { setUsualMarkers, setInitialMapState };
+export { setUsualMarkers, setInitialMapState, setMapDefault };

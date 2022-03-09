@@ -1,14 +1,7 @@
 import { setFeaturesDefault } from './form.js';
+import { setMapDefault } from './map.js';
 
 const DEFAULT_FILTER_VALUE = 'any';
-
-const mapFilterForm = document.querySelector('.map__filters');
-const objectTypeFilterSelect = mapFilterForm.querySelector('[name=housing-type]');
-const objectPriceFilterSelect = mapFilterForm.querySelector('[name=housing-price]');
-const objectRoomsFilterSelect = mapFilterForm.querySelector('[name=housing-rooms]');
-const objectCapacityFilterSelect = mapFilterForm.querySelector('[name=housing-guests]');
-const objectFeaturesFilter = mapFilterForm.querySelector('.map__features');
-const objectFeaturesFilterSet = objectFeaturesFilter.querySelectorAll('.map__checkbox');
 
 const PriceRange = {
   ANY: {
@@ -29,6 +22,14 @@ const PriceRange = {
   },
 };
 
+const mapFilterForm = document.querySelector('.map__filters');
+const objectTypeFilterSelect = mapFilterForm.querySelector('[name=housing-type]');
+const objectPriceFilterSelect = mapFilterForm.querySelector('[name=housing-price]');
+const objectRoomsFilterSelect = mapFilterForm.querySelector('[name=housing-rooms]');
+const objectCapacityFilterSelect = mapFilterForm.querySelector('[name=housing-guests]');
+const objectFeaturesFilter = mapFilterForm.querySelector('.map__features');
+const objectFeaturesFilterSet = objectFeaturesFilter.querySelectorAll('.map__checkbox');
+
 const compareCallBack = () => {
 
   const getPromoRank = (promo) => {
@@ -40,6 +41,7 @@ const compareCallBack = () => {
     const objectCapacityFilter = Number(objectCapacityFilterSelect.value);
     const checkedFeatures = objectFeaturesFilter.querySelectorAll('.map__checkbox:checked');
     const checkedFeaturesArray = [];
+
     checkedFeatures.forEach((feature) => checkedFeaturesArray.push(feature.value));
 
     let rank = 0;
@@ -48,9 +50,9 @@ const compareCallBack = () => {
     if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) rank += 3;
     if (offer.rooms === objectRoomsFilter) rank += 2;
     if (offer.guests === objectCapacityFilter) rank += 1;
-    if(offer.features) {
-      checkedFeaturesArray.forEach((feature)=>{
-        if(offer.features.includes(feature)) rank+=1;
+    if (offer.features) {
+      checkedFeaturesArray.forEach((feature) => {
+        if (offer.features.includes(feature)) rank += 1;
       })
     }
 
@@ -103,5 +105,7 @@ const setInitialFilterState = () => {
   objectCapacityFilterSelect.value = DEFAULT_FILTER_VALUE;
   setFeaturesDefault(objectFeaturesFilterSet);
 };
+
+mapFilterForm.addEventListener('change', () => setMapDefault());
 
 export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, setObjectFeaturesFilter };
