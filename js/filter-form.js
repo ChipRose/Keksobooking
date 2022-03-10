@@ -3,6 +3,13 @@ import { setMapDefault } from './map.js';
 
 const DEFAULT_FILTER_VALUE = 'any';
 
+const FilterElementID = {
+  TYPE: 'housing-type',
+  PRICE: 'housing-price',
+  ROOMS: 'housing-rooms',
+  GUESTS: 'housing-guests',
+};
+
 const PriceRange = {
   ANY: {
     MIN: 0,
@@ -30,11 +37,12 @@ const objectCapacityFilterSelect = mapFilterForm.querySelector('[name=housing-gu
 const objectFeaturesFilter = mapFilterForm.querySelector('.map__features');
 const objectFeaturesFilterSet = objectFeaturesFilter.querySelectorAll('.map__checkbox');
 
-const compareCallBack = () => {
 
+const compareCallBack = () => {
   const getPromoRank = (promo) => {
 
     const { offer } = promo;
+
     const objectTypeFilter = objectTypeFilterSelect.value;
     const objectPriceFilter = objectPriceFilterSelect.value.toUpperCase();
     const objectRoomsFilter = Number(objectRoomsFilterSelect.value);
@@ -68,34 +76,10 @@ const compareCallBack = () => {
   return comparePromos;
 };
 
-const setObjectTypeFilter = (cb) => {
-  objectTypeFilterSelect.addEventListener('change', () => {
+const setMapFilter = (cb) => {
+  mapFilterForm.addEventListener('change', () => {
     cb();
-  });
-};
-
-const setObjectPriceFilter = (cb) => {
-  objectPriceFilterSelect.addEventListener('change', () => {
-    cb();
-  });
-};
-
-const setObjectRoomsFilter = (cb) => {
-  objectRoomsFilterSelect.addEventListener('change', () => {
-    cb();
-  });
-};
-
-const setObjectCapacityFilter = (cb) => {
-  objectCapacityFilterSelect.addEventListener('change', () => {
-    cb();
-  });
-};
-
-const setObjectFeaturesFilter = (...callbacks) => {
-  objectFeaturesFilter.addEventListener('change', () => {
-    callbacks.forEach((cb) => cb());
-  });
+  })
 };
 
 const setInitialFilterState = () => {
@@ -108,4 +92,4 @@ const setInitialFilterState = () => {
 
 mapFilterForm.addEventListener('change', () => setMapDefault());
 
-export { compareCallBack, setInitialFilterState, setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, setObjectFeaturesFilter };
+export { setMapFilter, compareCallBack, setInitialFilterState };

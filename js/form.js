@@ -27,7 +27,6 @@ const capacitySelect = promoForm.querySelector('#capacity');
 const featuresSet = promoForm.querySelectorAll('.feature__checkbox');
 const descriptionTextArea = promoForm.querySelector('#description');
 
-
 const getPrice = (objectType = 'flat') => {
   const MinPrice = {
     BUNGALOW: 0,
