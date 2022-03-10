@@ -1,8 +1,13 @@
 import { mapLib } from './libraries.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
-import { setObjectTypeFilter, setObjectPriceFilter, setObjectRoomsFilter, setObjectCapacityFilter, setObjectFeaturesFilter, compareCallBack } from './filter-form.js';
-import { setInactiveFilterState, setActiveFilterState, setInactiveOfferFormState, setActiveOfferFormState } from './page-state.js';
+import { setMapFilter, compareCallBack } from './filter-form.js';
+import {
+  setInactiveFilterState,
+  setActiveFilterState,
+  setInactiveOfferFormState,
+  setActiveOfferFormState
+} from './page-state.js';
 
 const OBJECT_QUANTITY = 10;
 
@@ -28,8 +33,8 @@ const mapCanvas = document.querySelector('#map-canvas');
 setInactiveOfferFormState();
 setInactiveFilterState();
 
-const map = mapLib.map(mapCanvas,
-  {
+const map = mapLib
+  .map(mapCanvas, {
     scrollWheelZoom: false,
   })
   .on('load', () => {
@@ -37,21 +42,22 @@ const map = mapLib.map(mapCanvas,
     setActiveFilterState();
   });
 
-const setMapDefault = (map) => {
-  map.setView({
-    lat: CoordinatesDefault.LAT,
-    lng: CoordinatesDefault.LNG,
-  }, CoordinatesDefault.ZOOM);
-}
-
-setMapDefault(map);
-setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
-
-mapLib.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
+mapLib
+  .tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
+  })
+  .addTo(map);
+
+const setMapDefault = () => {
+  let { LAT, LNG, ZOOM } = CoordinatesDefault;
+  map.setView(
+    {
+      lat: LAT,
+      lng: LNG,
+    },
+    ZOOM,
+  );
+};
 
 const mapMainIcon = mapLib.icon({
   iconUrl: '../img/pin/main-pin.svg',
@@ -71,11 +77,6 @@ const mainMarker = mapLib.marker(
   },
 );
 
-const setMainMarkerDefault = () => {
-  mainMarker.setLatLng([CoordinatesDefault.LAT, CoordinatesDefault.LNG]);
-  setAddress(CoordinatesDefault.LAT, CoordinatesDefault.LNG);
-};
-
 mainMarker.addTo(map);
 
 const mapUsualIcon = mapLib.icon({
@@ -89,33 +90,34 @@ const setUsualMarkers = (similarPromos) => {
   const usualMarkers = [];
   const popupInfo = [];
 
-  similarPromos.slice().sort(compareCallBack()).slice(0, OBJECT_QUANTITY).forEach(({ author, offer, location }) => {
-    const usualMarker = mapLib.marker(
-      {
-        lat: location.lat,
-        lng: location.lng,
-      },
-      {
-        icon: mapUsualIcon,
-      },
-    );
+  similarPromos
+    .slice()
+    .sort(compareCallBack())
+    .slice(0, OBJECT_QUANTITY)
+    .forEach((promo) => {
+      const { location } = promo;
+      const usualMarker = mapLib.marker(
+        {
+          lat: location.lat,
+          lng: location.lng,
+        },
+        {
+          icon: mapUsualIcon,
+        },
+      );
 
-    usualMarkers.push(usualMarker);
-    popupInfo.push(renderSimilarPromos({ author, offer, location }));
-  });
+      usualMarkers.push(usualMarker);
+      popupInfo.push(renderSimilarPromos(promo));
+    });
 
   usualMarkers.forEach((marker, index) => {
     marker.addTo(map).bindPopup(popupInfo[index]),
     {
       keepInView: true,
     };
-  })
+  });
 
-  setObjectTypeFilter(() => removeMarker(usualMarkers));
-  setObjectPriceFilter(() => removeMarker(usualMarkers));
-  setObjectRoomsFilter(() => removeMarker(usualMarkers));
-  setObjectCapacityFilter(() => removeMarker(usualMarkers));
-  setObjectFeaturesFilter(() => removeMarker(usualMarkers));
+  setMapFilter(() => removeMarker(usualMarkers));
   clearForm(() => removeMarker(usualMarkers));
   setPromoFormSubmit(() => removeMarker(usualMarkers));
 };
@@ -125,18 +127,16 @@ const removeMarker = (markers) => {
 };
 
 const setInitialMapState = () => {
-  setMapDefault(map);
-  setMainMarkerDefault();
+  const { LAT, LNG } = CoordinatesDefault;
+  setMapDefault();
+  mainMarker.setLatLng([LAT, LNG]);
+  setAddress(LAT, LNG);
 };
+
+setInitialMapState();
 
 mainMarker.on('move', (evt) => {
   setAddress(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
 });
 
-setObjectTypeFilter(() => setMapDefault(map));
-setObjectPriceFilter(() => setMapDefault(map));
-setObjectRoomsFilter(() => setMapDefault(map));
-setObjectCapacityFilter(() => setMapDefault(map));
-setObjectFeaturesFilter(() => setMapDefault(map));
-
-export { setUsualMarkers, setInitialMapState };
+export { setUsualMarkers, setInitialMapState, setMapDefault };

@@ -27,18 +27,17 @@ const capacitySelect = promoForm.querySelector('#capacity');
 const featuresSet = promoForm.querySelectorAll('.feature__checkbox');
 const descriptionTextArea = promoForm.querySelector('#description');
 
-
 const getPrice = (objectType = 'flat') => {
   const MinPrice = {
     BUNGALOW: 0,
     FLAT: 1000,
     HOTEL: 3000,
     HOUSE: 5000,
-  }
+  };
   return {
     MIN: MinPrice[objectType.toUpperCase()],
     MAX: 1000000,
-  }
+  };
 };
 
 const setAddress = (coordinateLat, coordinateLng) => {
@@ -75,7 +74,9 @@ const setTimeDefault = () => {
 timeForm.addEventListener('change', (evt) => {
   const elementId = evt.target.id;
   let relateElementId = FIELD_TIMEIN_ID;
-  if (elementId === FIELD_TIMEIN_ID) { relateElementId = FIELD_TIMEOUT_ID; }
+  if (elementId === FIELD_TIMEIN_ID) {
+    relateElementId = FIELD_TIMEOUT_ID;
+  }
   setTime(elementId, relateElementId);
 });
 
@@ -85,17 +86,15 @@ const setCapacityDefault = () => {
 };
 
 const setFeaturesDefault = (features) => {
-  if (features) {
-    features.forEach((feature) => {
-      feature.checked = false;
-    });
-  }
+  features.forEach((feature) => {
+    feature.checked = false;
+  });
 };
 
 const clearField = (fields) => {
   fields.forEach((field) => {
     field.value = '';
-  })
+  });
 };
 
 const setInitialFormState = () => {
@@ -156,10 +155,14 @@ const setErrorState = () => {
 const sendPromoForm = (onSuccess, onError) => {
   const setState = () => {
     const formData = new FormData(promoForm);
-    sendData(() => onSuccess(), () => onError(), formData);
-  }
+    sendData(
+      () => onSuccess(),
+      () => onError(),
+      formData,
+    );
+  };
   return setState;
-}
+};
 
 const setPromoFormSubmit = (...callbacks) => {
   promoForm.addEventListener('submit', (evt) => {
@@ -173,6 +176,16 @@ const clearForm = (...callbacks) => {
     evt.preventDefault();
     callbacks.forEach((cb) => cb());
   });
-}
+};
 
-export { setAddress, getPrice, setFeaturesDefault, setPromoFormSubmit, sendPromoForm, clearForm, setSuccessState, setErrorState, setInitialFormState };
+export {
+  setAddress,
+  getPrice,
+  setFeaturesDefault,
+  setPromoFormSubmit,
+  sendPromoForm,
+  clearForm,
+  setSuccessState,
+  setErrorState,
+  setInitialFormState
+};
