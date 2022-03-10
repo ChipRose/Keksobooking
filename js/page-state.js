@@ -23,16 +23,16 @@ const FormClasses = {
 const setElementsState = (elements, state) => {
   elements.forEach((element) => {
     element.disabled = state;
-  })
+  });
 };
 
 const setFormState = (form, state) => {
-  const {FORM, ELEMENTS, DISABLED} = form;
+  const { FORM, ELEMENTS, DISABLED } = form;
   const parentForm = document.querySelector(`.${FORM}`);
   const formElements = parentForm.querySelectorAll(`.${ELEMENTS}`);
   parentForm.classList.toggle(DISABLED);
   setElementsState(formElements, FormElementsStates[state]);
-}
+};
 
 const setInactiveFilterState = () => {
   setFormState(FormClasses.MAP_FILTER, FormClasses.INACTIVE);

@@ -29,16 +29,18 @@ const getRightRoomGuestWordsForm = (elementsQuantity) => {
 };
 
 const createPhraseForAvailableRooms = (roomsQuantity, guestQuantity) => {
-  return `${roomsQuantity} ${getRightRoomGuestWordsForm(roomsQuantity).ROOM} для ${guestQuantity} ${getRightRoomGuestWordsForm(guestQuantity).GUEST}`
+  return `${roomsQuantity} ${getRightRoomGuestWordsForm(roomsQuantity).ROOM} для ${guestQuantity} ${
+    getRightRoomGuestWordsForm(guestQuantity).GUEST
+  }`;
 };
 
 const showOfferPhotos = (parentBlock, availablePhotos) => {
   const photoTemplate = parentBlock.querySelector('.popup__photo');
   const photoFragment = document.createDocumentFragment();
 
-  parentBlock.innerHTML='';
+  parentBlock.innerHTML = '';
 
-  if(availablePhotos) {
+  if (availablePhotos) {
     availablePhotos.forEach((photo) => {
       const photoItem = photoTemplate.cloneNode(true);
       photoItem.src = photo;
@@ -52,13 +54,13 @@ const showOfferPhotos = (parentBlock, availablePhotos) => {
 const showOfferFeatures = (parentBlock, availableFeatures) => {
   parentBlock.innerHTML = '';
 
-  if(availableFeatures) {
+  if (availableFeatures) {
     availableFeatures.forEach((feature) => {
       const item = document.createElement('li');
       item.classList.add('popup__feature');
       item.classList.add(`popup__feature--${feature}`);
       parentBlock.appendChild(item);
-    })
+    });
   }
 };
 
@@ -79,4 +81,4 @@ const renderSimilarPromos = (promo) => {
   return popupElement;
 };
 
-export { renderSimilarPromos, getRightRoomGuestWordsForm };
+export { renderSimilarPromos };

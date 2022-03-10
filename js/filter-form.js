@@ -29,7 +29,6 @@ const objectFeaturesFilterSet = objectFeaturesFilter.querySelectorAll('.map__che
 
 const compareCallBack = () => {
   const getPromoRank = (promo) => {
-
     const { offer } = promo;
     let rank = 0;
 
@@ -39,14 +38,24 @@ const compareCallBack = () => {
     const objectCapacityFilter = Number(mapFilterForm.querySelector('#housing-guests').value);
     const checkedFeatures = objectFeaturesFilter.querySelectorAll('.map__checkbox:checked');
 
-    if (offer.type === objectTypeFilter) { rank += 4 };
-    if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) { rank += 3 };
-    if (offer.rooms === objectRoomsFilter) { rank += 2 };
-    if (offer.guests === objectCapacityFilter) { rank += 1 };
+    if (offer.type === objectTypeFilter) {
+      rank += 4;
+    }
+    if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) {
+      rank += 3;
+    }
+    if (offer.rooms === objectRoomsFilter) {
+      rank += 2;
+    }
+    if (offer.guests === objectCapacityFilter) {
+      rank += 1;
+    }
     if (offer.features) {
       checkedFeatures.forEach((feature) => {
-        if (offer.features.includes(feature.value)) { rank += 1 };
-      })
+        if (offer.features.includes(feature.value)) {
+          rank += 1;
+        }
+      });
     }
 
     return rank;
@@ -55,7 +64,7 @@ const compareCallBack = () => {
   const comparePromos = (promoA, promoB) => {
     const rankA = getPromoRank(promoA);
     const rankB = getPromoRank(promoB);
-    return (rankB - rankA);
+    return rankB - rankA;
   };
 
   return comparePromos;
@@ -65,7 +74,7 @@ const setMapFilter = (cb) => {
   mapFilterForm.addEventListener('change', () => {
     cb();
     setMapDefault();
-  })
+  });
 };
 
 const setInitialFilterState = () => {

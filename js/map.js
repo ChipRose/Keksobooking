@@ -6,7 +6,7 @@ import {
   setInactiveFilterState,
   setActiveFilterState,
   setInactiveOfferFormState,
-  setActiveOfferFormState,
+  setActiveOfferFormState
 } from './page-state.js';
 
 const OBJECT_QUANTITY = 10;
@@ -55,7 +55,7 @@ const setMapDefault = () => {
       lat: LAT,
       lng: LNG,
     },
-    ZOOM
+    ZOOM,
   );
 };
 
@@ -74,7 +74,7 @@ const mainMarker = mapLib.marker(
   {
     draggable: true,
     icon: mapMainIcon,
-  }
+  },
 );
 
 mainMarker.addTo(map);
@@ -103,7 +103,7 @@ const setUsualMarkers = (similarPromos) => {
         },
         {
           icon: mapUsualIcon,
-        }
+        },
       );
 
       usualMarkers.push(usualMarker);
@@ -112,9 +112,9 @@ const setUsualMarkers = (similarPromos) => {
 
   usualMarkers.forEach((marker, index) => {
     marker.addTo(map).bindPopup(popupInfo[index]),
-      {
-        keepInView: true,
-      };
+    {
+      keepInView: true,
+    };
   });
 
   setMapFilter(() => removeMarker(usualMarkers));
@@ -127,7 +127,7 @@ const removeMarker = (markers) => {
 };
 
 const setInitialMapState = () => {
-  const {LAT, LNG} = CoordinatesDefault;
+  const { LAT, LNG } = CoordinatesDefault;
   setMapDefault();
   mainMarker.setLatLng([LAT, LNG]);
   setAddress(LAT, LNG);
