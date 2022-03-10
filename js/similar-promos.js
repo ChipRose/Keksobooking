@@ -36,15 +36,15 @@ const showOfferPhotos = (parentBlock, availablePhotos) => {
   const photoTemplate = parentBlock.querySelector('.popup__photo');
   const photoFragment = document.createDocumentFragment();
 
-  availablePhotos.forEach((photo, index) => {
-    let photoItem = photoTemplate;
+  parentBlock.innerHTML='';
 
-    if (index >= 1) {
-      photoItem = photoTemplate.cloneNode(true);
-    }
-    photoItem.src = photo;
-    photoFragment.appendChild(photoItem);
-  });
+  if(availablePhotos) {
+    availablePhotos.forEach((photo) => {
+      const photoItem = photoTemplate.cloneNode(true);
+      photoItem.src = photo;
+      photoFragment.appendChild(photoItem);
+    });
+  }
 
   parentBlock.appendChild(photoFragment);
 };
@@ -54,27 +54,17 @@ const showOfferFeatures = (parentBlock, availableFeatures) => {
 
   if(availableFeatures) {
     availableFeatures.forEach((feature) => {
-      let item = document.createElement('li');
+      const item = document.createElement('li');
       item.classList.add('popup__feature');
       item.classList.add(`popup__feature--${feature}`);
       parentBlock.appendChild(item);
     })
   }
-
-};
-
-const showAvailableProperties = (parentBlock, availableProperty) => {
-  if (!availableProperty) {
-    parentBlock.classList.add('hidden')
-  } else if (parentBlock.classList.contains('popup__photos')) {
-    showOfferPhotos(parentBlock, availableProperty);
-  } else if (parentBlock.classList.contains('popup__features')) {
-    showOfferFeatures(parentBlock, availableProperty);
-  }
 };
 
 const renderSimilarPromos = (promo) => {
   const { author, offer } = promo;
+
   const popupElement = promoTemplate.cloneNode(true);
   popupElement.querySelector('.popup__avatar').src = author.avatar;
   popupElement.querySelector('.popup__title').textContent = offer.title;
@@ -85,7 +75,7 @@ const renderSimilarPromos = (promo) => {
   popupElement.querySelector('.popup__text--capacity').textContent = createPhraseForAvailableRooms(offer.rooms, offer.guests);
   showOfferFeatures(popupElement.querySelector('.popup__features'), offer.features);
   popupElement.querySelector('.popup__description').textContent = offer.description;
-  showAvailableProperties(popupElement.querySelector('.popup__photos'), offer.photos);
+  showOfferPhotos(popupElement.querySelector('.popup__photos'), offer.photos);
   return popupElement;
 };
 
