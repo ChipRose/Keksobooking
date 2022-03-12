@@ -4,6 +4,8 @@ import './form.js';
 import './map.js';
 import './images-preview.js';
 
+import './../css/style.css';
+
 import { setUsualMarkers, setInitialMapState } from './map.js';
 import { getData } from './api.js';
 import { showAllertMessage, createErrorMessage } from './util/util-message.js';

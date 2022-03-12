@@ -1,5 +1,5 @@
-import * as L from 'leaflet';
-import * as _ from 'lodash';
+import L from 'leaflet';
+import _ from 'lodash';
 
 const mapLib = L;
 const debounceLib = _.debounce;

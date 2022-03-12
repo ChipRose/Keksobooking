@@ -2,12 +2,7 @@ import { mapLib } from './libraries.js';
 import { renderSimilarPromos } from './similar-promos.js';
 import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
 import { setMapFilter, compareCallBack } from './filter-form.js';
-import {
-  setInactiveFilterState,
-  setActiveFilterState,
-  setInactiveOfferFormState,
-  setActiveOfferFormState
-} from './page-state.js';
+import { setInactiveFilterState, setActiveFilterState, setInactiveOfferFormState, setActiveOfferFormState} from './page-state.js';
 
 const OBJECT_QUANTITY = 10;
 
