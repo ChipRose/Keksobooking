@@ -48,7 +48,6 @@
   "scripts": {
     "test": "eslint \"source/**/*.js\"",
     "build": "cross-env NODE_ENV=production webpack --mode production",
-    "watch": "npm run build -- --watch",
     "start": "cross-env NODE_ENV=development webpack serve --mode development"
   },
   "engines": {

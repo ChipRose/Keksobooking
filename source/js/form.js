@@ -1,6 +1,7 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js';
 import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
+import { setDefaultPreview } from './images-preview.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -112,6 +113,7 @@ const setInitialFormState = () => {
   setTimeDefault();
   setCapacityDefault();
   setFeaturesDefault(featuresSet);
+  setDefaultPreview();
 };
 
 setInitialFormState();
