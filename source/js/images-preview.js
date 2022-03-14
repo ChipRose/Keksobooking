@@ -23,12 +23,13 @@ const setImagePreview = (inputField, previewField) => {
     return fileName.endsWith(extension)
   });
 
-  previewField.innerHTML = '';
+
 
   if (matches) {
     const reader = new FileReader();
 
     reader.addEventListener('load', () => {
+      previewField.innerHTML = '';
       const image = document.createElement('img');
       image.src = reader.result;
       image.style.maxHeight='100%';
