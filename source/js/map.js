@@ -55,7 +55,7 @@ const setMapDefault = () => {
 };
 
 const mapMainIcon = mapLib.icon({
-  iconUrl: '../img/pin/main-pin.svg',
+  iconUrl: './../img/pin/main-pin.svg',
   iconSize: [MarkerSizes.MAIN.X, MarkerSizes.MAIN.Y],
   iconAnchor: [MarkerSizes.MAIN.X / 2, MarkerSizes.MAIN.Y],
   popupAnchor: [0, -MarkerSizes.MAIN.Y / 2],
@@ -75,7 +75,7 @@ const mainMarker = mapLib.marker(
 mainMarker.addTo(map);
 
 const mapUsualIcon = mapLib.icon({
-  iconUrl: '../img/pin/pin.svg',
+  iconUrl: './../img/pin/pin.svg',
   iconSize: [MarkerSizes.USUAL.X, MarkerSizes.USUAL.Y],
   iconAnchor: [MarkerSizes.USUAL.X / 2, MarkerSizes.USUAL.Y],
   popupAnchor: [0, -MarkerSizes.USUAL.Y / 2],
