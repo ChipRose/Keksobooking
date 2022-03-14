@@ -31,6 +31,7 @@ const setImagePreview = (inputField, previewField) => {
     reader.addEventListener('load', () => {
       const image = document.createElement('img');
       image.src = reader.result;
+      image.style.maxHeight='100%';
       previewField.appendChild(image);
       previewField.style.padding = '0';
       previewField.style.flexShrink = '0';

@@ -1,10 +1,15 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js';
 import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
+import { setDefaultPreview } from './images-preview.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
 const FIELD_TIMEOUT_ID = 'timeout';
+
+const TimeValueDefault = {
+  IN: '12:00',
+}
 
 const RoomsValue = {
   FOR_ONE: '1',
@@ -61,14 +66,19 @@ promoTypeSelect.addEventListener('change', () => {
   setMinPrice();
 });
 
-const setTime = (elementID, relateElementId) => {
+const setTime = (elementID, relateElementId, defValue) => {
   const nessesaryTimeValue = promoForm.querySelector(`#${elementID}`);
   const relateEventElement = promoForm.querySelector(`#${relateElementId}`);
-  relateEventElement.value = nessesaryTimeValue.value;
+  if (defValue) {
+    nessesaryTimeValue.value = defValue;
+    relateEventElement.value = defValue;
+  } else {
+    relateEventElement.value = nessesaryTimeValue.value;
+  }
 };
 
 const setTimeDefault = () => {
-  setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID);
+  setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID, TimeValueDefault.IN);
 };
 
 timeForm.addEventListener('change', (evt) => {
@@ -103,6 +113,7 @@ const setInitialFormState = () => {
   setTimeDefault();
   setCapacityDefault();
   setFeaturesDefault(featuresSet);
+  setDefaultPreview();
 };
 
 setInitialFormState();
