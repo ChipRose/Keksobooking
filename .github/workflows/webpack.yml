@@ -29,7 +29,6 @@ jobs:
         npm build
     
     - name: Deploy
-       uses: JamesIves/github-pages-deploy-action@master
       with:
         branch: gh-pages 
         folder: build
