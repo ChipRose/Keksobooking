@@ -30,7 +30,6 @@ function optimization() {
               ['gifsicle', { interlaced: true }],
               ['jpegtran', { progressive: true }],
               ['optipng', { optimizationLevel: 5 }],
-              ['svgo'],
             ],
           },
         },
@@ -51,6 +50,7 @@ const plugins = () => {
     new CopyPlugin({
       patterns: [
         { from: path.resolve(__dirname, 'source/fonts'), to: 'fonts' },
+        { from: path.resolve(__dirname, 'source/favicon.ico'), to: 'favicon.ico' },
         { from: path.resolve(__dirname, 'source/img'), to: 'img' },
       ],
     }),
@@ -69,7 +69,7 @@ module.exports = {
 
   entry: './js/main.js',
   output: {
-    filename: 'js/main.bundle.js',
+    filename: 'js/[name].bundle.js',
     path: path.resolve(__dirname, 'build'),
     clean: true,
   },
