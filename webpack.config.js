@@ -7,39 +7,37 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
 const OptimizeSccAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
-const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
-const { extendDefaultPlugins } = require("svgo");
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 const CopyPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
-const DevServer = require('webpack-dev-server');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
-const optimization = () => {
-  const configObj = {};
+function optimization() {
+  let configObj = [];
 
   if (isProd) {
-    configObj.minimizer = [
-      new HtmlMinimizerPlugin(),
-      new OptimizeSccAssetsWebpackPlugin(),
+    configObj = [
+      new TerserWebpackPlugin({
+
+      }),
       new ImageMinimizerPlugin({
         minimizer: {
           implementation: ImageMinimizerPlugin.imageminMinify,
           options: {
             plugins: [
-              ["gifsicle", { interlaced: true }],
-              ["jpegtran", { progressive: true }],
-              ["optipng", { optimizationLevel: 5 }],
-              [ "svgo",],
+              ['gifsicle', { interlaced: true }],
+              ['jpegtran', { progressive: true }],
+              ['optipng', { optimizationLevel: 5 }],
+              ['svgo'],
             ],
           },
         },
       }),
-      new TerserWebpackPlugin(),
-    ]
+      new OptimizeSccAssetsWebpackPlugin(),
+      new HtmlMinimizerPlugin(),
+    ];
   }
 
   return configObj;
@@ -53,14 +51,13 @@ const plugins = () => {
     new CopyPlugin({
       patterns: [
         { from: path.resolve(__dirname, 'source/fonts'), to: 'fonts' },
-        { from: path.resolve(__dirname, 'source/img'), to: `img` },
+        { from: path.resolve(__dirname, 'source/img'), to: 'img' },
       ],
     }),
     new HTMLPlugin({
       template: path.resolve(__dirname, 'source/index.html'),
       filename: 'index.html',
     }),
-    new CleanWebpackPlugin(),
   ];
 
   return basePlugins;
@@ -74,9 +71,10 @@ module.exports = {
   output: {
     filename: 'js/main.bundle.js',
     path: path.resolve(__dirname, 'build'),
+    clean: true,
   },
 
-  devtool: 'source-map',
+  devtool: isProd ? false : 'source-map',
 
   devServer: {
     static: {
@@ -84,15 +82,21 @@ module.exports = {
     },
     open: true,
     compress: true,
-    hot: true,
     port: 3000,
   },
 
+  optimization: {
+    minimize: isProd,
+    minimizer: optimization(),
+  },
+  plugins: plugins(),
+
   module: {
     rules: [
+      //Images
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        type: "asset",
+        test: /\.(jpeg|jpg|png|gif|svg)$/i,
+        type: 'asset',
       },
       {
         //JS
@@ -112,7 +116,4 @@ module.exports = {
       },
     ],
   },
-
-  optimization: optimization(),
-  plugins: plugins(),
 };
