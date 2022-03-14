@@ -29,6 +29,7 @@ jobs:
         npm build
     
     - name: Deploy
+      uses: actions/setup-node@v1
       with:
         branch: gh-pages 
         folder: build
