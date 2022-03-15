@@ -2,6 +2,8 @@ import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacit
 import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
 import { setDefaultPreview } from './images-preview.js';
+import { setInitialFilterState } from './filter-form.js';
+import { setInitialMapState } from './map.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -165,6 +167,9 @@ const setSuccessState = () => {
   const SUCCESS_MESSAGE_CONTENT = 'success';
 
   showMessage(createMessage(SUCCESS_MESSAGE_ID, SUCCESS_MESSAGE_CONTENT));
+  setInitialFormState();
+  setInitialFilterState();
+  setInitialMapState();
 };
 
 const setErrorState = () => {

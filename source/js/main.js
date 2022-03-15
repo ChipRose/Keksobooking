@@ -22,5 +22,5 @@ getData(
   () => showAllertMessage(createErrorMessage),
 );
 
-setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState), setInitialFormState, setInitialFilterState, setInitialMapState);
+setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState));
 clearForm(setInitialFormState, setInitialFilterState, setInitialMapState);
