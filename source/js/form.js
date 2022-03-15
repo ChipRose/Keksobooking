@@ -38,6 +38,7 @@ const getPrice = (objectType = 'flat') => {
     FLAT: 1000,
     HOTEL: 3000,
     HOUSE: 5000,
+    PALACE: 10000,
   };
   return {
     MIN: MinPrice[objectType.toUpperCase()],
@@ -63,7 +64,7 @@ const setMinPriceDefault = () => {
 };
 
 promoTypeSelect.addEventListener('change', () => {
-  setMinPrice();
+  setMinPrice(promoTypeSelect.value);
 });
 
 const setTime = (elementID, relateElementId, defValue) => {
