@@ -17,7 +17,7 @@ const roomsProperties = {
   capacityValue: {
     forOne: '1',
     notForGuests: '0',
-  }
+  },
 };
 
 const promoForm = document.querySelector('.ad-form');
