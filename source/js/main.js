@@ -4,8 +4,8 @@ import './../css/style.css';
 
 import { setUsualMarkers, setInitialMapState } from './map.js';
 import { getData } from './api.js';
-import { showAllertMessage, createErrorMessage } from './util/util-message.js';
-import { setPromoFormSubmit, clearForm, sendPromoForm, setSuccessState, setErrorState, setInitialFormState } from './form.js';
+import { setSuccessState, setErrorState, showAllertMessage } from './util/util-message.js';
+import { setPromoFormSubmit, clearForm, sendPromoForm, setInitialFormState } from './form.js';
 import { setMapFilter, setInitialFilterState } from './filter-form.js';
 import { debounceLib } from './libraries.js';
 
@@ -19,7 +19,7 @@ getData(
     clearForm(() => setUsualMarkers(promos));
   },
 
-  () => showAllertMessage(createErrorMessage),
+  () => showAllertMessage(),
 );
 
 setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState));

@@ -6,7 +6,7 @@ const rusCompareOfferTypes = {
   hotel: 'отель',
 };
 
-const StepsWordsFormChanged = {
+const WordsFormChangedSteps = {
   FIRST: 1,
   SECOND: 4,
 };
@@ -18,11 +18,11 @@ const getRightRoomGuestWordsForm = (elementsQuantity) => {
     room: 'комнат',
     guest: 'гостей',
   };
-  if (elementsQuantity === StepsWordsFormChanged.FIRST) {
+  if (elementsQuantity === WordsFormChangedSteps.FIRST) {
     formWords.room = 'комната';
     formWords.guest = 'гостя';
   }
-  if (elementsQuantity > StepsWordsFormChanged.FIRST && elementsQuantity <= StepsWordsFormChanged.SECOND) {
+  if (elementsQuantity > WordsFormChangedSteps.FIRST && elementsQuantity <= WordsFormChangedSteps.SECOND) {
     formWords.room = 'комнаты';
   }
   return formWords;
@@ -65,7 +65,7 @@ const showOfferFeatures = (parentBlock, availableFeatures) => {
   }
 };
 
-const renderSimilarPromos = (promo) => {
+const promoRender = (promo) => {
   const { author, offer } = promo;
 
   const popupElement = promoTemplate.cloneNode(true);
@@ -82,4 +82,4 @@ const renderSimilarPromos = (promo) => {
   return popupElement;
 };
 
-export { renderSimilarPromos };
+export { promoRender };

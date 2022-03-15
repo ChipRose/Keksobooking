@@ -1,5 +1,5 @@
 import { mapLib } from './libraries.js';
-import { renderSimilarPromos } from './similar-promos.js';
+import { promoRender } from './similar-promos.js';
 import { setAddress, clearForm, setPromoFormSubmit } from './form.js';
 import { setMapFilter, compareCallBack } from './filter-form.js';
 import { setInactiveFilterState, setActiveFilterState, setInactiveOfferFormState, setActiveOfferFormState} from './page-state.js';
@@ -90,10 +90,12 @@ const setUsualMarkers = (similarPromos) => {
     .sort(compareCallBack())
     .slice(0, OBJECT_QUANTITY)
     .forEach((promo) => {
+      const {lat, lng} = promo.location;
+
       const usualMarker = mapLib.marker(
         {
-          lat: promo.location.lat,
-          lng: promo.location.lng,
+          lat,
+          lng,
         },
         {
           icon: mapUsualIcon,
@@ -101,7 +103,7 @@ const setUsualMarkers = (similarPromos) => {
       );
 
       usualMarkers.push(usualMarker);
-      popupInfoBlocks.push(renderSimilarPromos(promo));
+      popupInfoBlocks.push(promoRender(promo));
     });
 
   usualMarkers.forEach((marker, index) => {
@@ -111,17 +113,18 @@ const setUsualMarkers = (similarPromos) => {
     };
   });
 
-  setMapFilter(() => removeMarker(usualMarkers));
-  clearForm(() => removeMarker(usualMarkers));
-  setPromoFormSubmit(() => removeMarker(usualMarkers));
+  setMapFilter(() => removeMarkers(usualMarkers));
+  clearForm(() => removeMarkers(usualMarkers));
+  setPromoFormSubmit(() => removeMarkers(usualMarkers));
 };
 
-const removeMarker = (markers) => {
+const removeMarkers = (markers) => {
   markers.forEach((marker) => marker.remove());
 };
 
 const setInitialMapState = () => {
   const { LAT, LNG } = CoordinatesDefault;
+
   setMapDefault();
   mainMarker.setLatLng([LAT, LNG]);
   setAddress(LAT, LNG);
