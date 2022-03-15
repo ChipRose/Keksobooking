@@ -88,7 +88,7 @@ const setUsualMarkers = (similarPromos) => {
     .slice()
     .sort(compareCallBack())
     .slice(0, OBJECT_QUANTITY)
-    .forEach((promo,index) => {
+    .forEach((promo) => {
       const usualMarker = mapLib.marker(
         {
           lat: promo.location.lat,
