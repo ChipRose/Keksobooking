@@ -26,13 +26,9 @@ const sendData = (onSuccess, onError, body) => {
     },
   )
     .then((response) => {
-      if (response.ok) {
-        onSuccess();
+      response.ok ? onSuccess() : onError();
       }
-      else {
-        onError();
-      }
-    })
+    )
     .catch(() => onError());
 };
 
