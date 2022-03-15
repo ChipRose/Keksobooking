@@ -30,6 +30,7 @@ const setFormState = (form, state) => {
   const { FORM, ELEMENTS, DISABLED } = form;
   const parentForm = document.querySelector(`.${FORM}`);
   const formElements = parentForm.querySelectorAll(`.${ELEMENTS}`);
+
   state === FormClasses.ACTIVE ? parentForm.classList.remove(DISABLED) : parentForm.classList.add(DISABLED);
   setElementsState(formElements, FormElementsStates[state]);
 };

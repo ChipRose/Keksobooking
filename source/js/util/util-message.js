@@ -1,41 +1,54 @@
+import { setInitialFormState } from "../form";
+import { setInitialFilterState } from "../filter-form";
+import { setInitialMapState } from "../map";
+
 const ALERT_SHOW_TIME = 3000;
 
-const Keys = {
-  ESCAPE: 'Escape',
-  ESC: 'ESC',
-}
-
-const body = document.querySelector('body');
-
-const isEscape = (evt) => {
-  return evt.key === Keys.ESC || evt.key ===Keys.ESCAPE;
-}
-
-const createMessage = (templateID, contentClass) => {
-  const template = document.querySelector(`#${templateID}`).content.querySelector(`.${contentClass}`);
-  const elementTemplate = template.cloneNode(true);
-  return elementTemplate;
+const keys = {
+  escape: 'Escape',
+  esc: 'ESC',
 };
 
+const body = document.querySelector('body');
+const templateSuccess = document.querySelector('#success').content.querySelector('.success');
+const templateError = document.querySelector('#error').content.querySelector('.error');
+
+const isEscape = (evt) => {
+  return evt.key === keys.esc || evt.key === keys.escape;
+}
+
 const showMessage = (template, buttonClose) => {
+
   body.appendChild(template);
+
   template.addEventListener('click', () => {
-    template.remove();
+    body.removeChild(template);
   })
 
   document.addEventListener('keydown', (evt) => {
     if (isEscape(evt)) {
-      template.remove();
+      body.removeChild(template);
       document.removeEventListener('keydown', (evt));
     }
   });
 
   if (buttonClose) {
-    const button = template.querySelector(`.${buttonClose}`);
+    const button = elementTemplate.querySelector(`.${buttonClose}`);
     button.addEventListener('click', () => {
-      template.remove();
+      body.removeChild(template);;
     })
   }
+};
+
+const setSuccessState = () => {
+  showMessage(templateSuccess);
+  setInitialFormState();
+  setInitialFilterState();
+  setInitialMapState();
+};
+
+const setErrorState = () => {
+  showMessage(templateError);
 };
 
 const createErrorMessage = () => {
@@ -55,8 +68,8 @@ const createErrorMessage = () => {
   return errorContainer;
 };
 
-const showAllertMessage = (template) => {
-  const element = template();
+const showAllertMessage = () => {
+  const element = createErrorMessage();
   body.appendChild(element);
 
   setTimeout(() => {
@@ -64,4 +77,4 @@ const showAllertMessage = (template) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { createMessage, showMessage, createErrorMessage, showAllertMessage };
+export { setSuccessState, setErrorState, showAllertMessage};

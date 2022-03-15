@@ -1,9 +1,6 @@
 import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacity } from './validation.js';
-import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
 import { setDefaultPreview } from './images-preview.js';
-import { setInitialFilterState } from './filter-form.js';
-import { setInitialMapState } from './map.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
@@ -41,6 +38,7 @@ const getPrice = (objectType = 'flat') => {
     HOUSE: 5000,
     PALACE: 10000,
   };
+
   return {
     MIN: MinPrice[objectType.toUpperCase()],
     MAX: 1000000,
@@ -162,24 +160,6 @@ promoPriceInput.addEventListener('input', () => {
   promoPriceInput.reportValidity();
 });
 
-const setSuccessState = () => {
-  const SUCCESS_MESSAGE_ID = 'success';
-  const SUCCESS_MESSAGE_CONTENT = 'success';
-
-  showMessage(createMessage(SUCCESS_MESSAGE_ID, SUCCESS_MESSAGE_CONTENT));
-  setInitialFormState();
-  setInitialFilterState();
-  setInitialMapState();
-};
-
-const setErrorState = () => {
-  const ERROR_MESSAGE_ID = 'error';
-  const ERROR_MESSAGE_CONTENT = 'error';
-  const ERROR_BUTTON = 'error__button';
-
-  showMessage(createMessage(ERROR_MESSAGE_ID, ERROR_MESSAGE_CONTENT), ERROR_BUTTON);
-};
-
 const sendPromoForm = (onSuccess, onError) => {
   const setState = () => {
     const formData = new FormData(promoForm);
@@ -214,7 +194,5 @@ export {
   setPromoFormSubmit,
   sendPromoForm,
   clearForm,
-  setSuccessState,
-  setErrorState,
   setInitialFormState
 };
