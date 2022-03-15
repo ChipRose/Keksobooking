@@ -22,10 +22,11 @@ const checkValideTitle = (titleField, titleLength) => {
 };
 
 const checkValidePrice = (priceField, type, price) => {
-  if (price < getPrice(type).MIN) {
-    priceField.setCustomValidity(`Цена должна быть больше ${getPrice(type).MIN}`);
-  } else if (price > getPrice().MAX) {
-    priceField.setCustomValidity(`Максимальная цена ${getPrice().MAX}`);
+  const { MIN, MAX } = getPrice(type);
+  if (price < MIN) {
+    priceField.setCustomValidity(`Цена должна быть больше ${MIN}`);
+  } else if (price > MAX) {
+    priceField.setCustomValidity(`Максимальная цена ${MAX}`);
   } else {
     priceField.setCustomValidity('');
   }

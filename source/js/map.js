@@ -44,13 +44,12 @@ mapLib
   .addTo(map);
 
 const setMapDefault = () => {
-  let { LAT, LNG, ZOOM } = CoordinatesDefault;
   map.setView(
     {
-      lat: LAT,
-      lng: LNG,
+      lat: CoordinatesDefault.LAT,
+      lng: CoordinatesDefault.LNG,
     },
-    ZOOM,
+    CoordinatesDefault.ZOOM,
   );
 };
 
@@ -83,18 +82,17 @@ const mapUsualIcon = mapLib.icon({
 
 const setUsualMarkers = (similarPromos) => {
   const usualMarkers = [];
-  const popupInfo = [];
+  const popupInfoBlocks = [];
 
   similarPromos
     .slice()
     .sort(compareCallBack())
     .slice(0, OBJECT_QUANTITY)
     .forEach((promo) => {
-      const { location } = promo;
       const usualMarker = mapLib.marker(
         {
-          lat: location.lat,
-          lng: location.lng,
+          lat: promo.location.lat,
+          lng: promo.location.lng,
         },
         {
           icon: mapUsualIcon,
@@ -102,11 +100,11 @@ const setUsualMarkers = (similarPromos) => {
       );
 
       usualMarkers.push(usualMarker);
-      popupInfo.push(renderSimilarPromos(promo));
+      popupInfoBlocks.push(renderSimilarPromos(promo));
     });
 
   usualMarkers.forEach((marker, index) => {
-    marker.addTo(map).bindPopup(popupInfo[index]),
+    marker.addTo(map).bindPopup(popupInfoBlocks[index]),
     {
       keepInView: true,
     };

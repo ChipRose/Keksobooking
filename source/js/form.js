@@ -2,23 +2,24 @@ import { checkEmptyField, checkValideTitle, checkValidePrice, checkValideCapacit
 import { createMessage, showMessage } from './util/util-message.js';
 import { sendData } from './api.js';
 import { setDefaultPreview } from './images-preview.js';
+import { setInitialFilterState } from './filter-form.js';
+import { setInitialMapState } from './map.js';
 
 const COORDINATE_ACCURACY = 5;
 const FIELD_TIMEIN_ID = 'timein';
 const FIELD_TIMEOUT_ID = 'timeout';
+const TIMEIN_VALUE_DEFAULT = '12:00';
 
-const TimeValueDefault = {
-  IN: '12:00',
-}
 
-const RoomsValue = {
-  FOR_ONE: '1',
-  NOT_FOR_GUESTS: '100',
-};
-
-const CapacityValue = {
-  FOR_ONE: '1',
-  NOT_FOR_GUESTS: '0',
+const roomsProperties = {
+  roomsValue: {
+    forOne: '1',
+    notForGuests: '100',
+  },
+  capacityValue: {
+    forOne: '1',
+    notForGuests: '0',
+  },
 };
 
 const promoForm = document.querySelector('.ad-form');
@@ -38,6 +39,7 @@ const getPrice = (objectType = 'flat') => {
     FLAT: 1000,
     HOTEL: 3000,
     HOUSE: 5000,
+    PALACE: 10000,
   };
   return {
     MIN: MinPrice[objectType.toUpperCase()],
@@ -50,12 +52,15 @@ const setAddress = (coordinateLat, coordinateLng) => {
     LAT: coordinateLat.toFixed(COORDINATE_ACCURACY),
     LNG: coordinateLng.toFixed(COORDINATE_ACCURACY),
   };
+
   promoAddress.value = `${Coordinates.LAT}, ${Coordinates.LNG}`;
 };
 
 const setMinPrice = (offerType) => {
-  promoPriceInput.placeholder = getPrice(offerType).MIN;
-  promoPriceInput.min = getPrice(offerType).MIN;
+  const { MIN } = getPrice(offerType);
+
+  promoPriceInput.placeholder = MIN;
+  promoPriceInput.min = MIN;
 };
 
 const setMinPriceDefault = () => {
@@ -63,12 +68,13 @@ const setMinPriceDefault = () => {
 };
 
 promoTypeSelect.addEventListener('change', () => {
-  setMinPrice();
+  setMinPrice(promoTypeSelect.value);
 });
 
 const setTime = (elementID, relateElementId, defValue) => {
   const nessesaryTimeValue = promoForm.querySelector(`#${elementID}`);
   const relateEventElement = promoForm.querySelector(`#${relateElementId}`);
+
   if (defValue) {
     nessesaryTimeValue.value = defValue;
     relateEventElement.value = defValue;
@@ -78,12 +84,13 @@ const setTime = (elementID, relateElementId, defValue) => {
 };
 
 const setTimeDefault = () => {
-  setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID, TimeValueDefault.IN);
+  setTime(FIELD_TIMEIN_ID, FIELD_TIMEOUT_ID, TIMEIN_VALUE_DEFAULT);
 };
 
 timeForm.addEventListener('change', (evt) => {
   const elementId = evt.target.id;
   let relateElementId = FIELD_TIMEIN_ID;
+
   if (elementId === FIELD_TIMEIN_ID) {
     relateElementId = FIELD_TIMEOUT_ID;
   }
@@ -91,8 +98,10 @@ timeForm.addEventListener('change', (evt) => {
 });
 
 const setCapacityDefault = () => {
-  roomNumberSelect.value = RoomsValue.FOR_ONE;
-  capacitySelect.value = CapacityValue.FOR_ONE;
+  const { roomsValue, capacityValue } = roomsProperties;
+
+  roomNumberSelect.value = roomsValue.forOne;
+  capacitySelect.value = capacityValue.forOne;
 };
 
 const setFeaturesDefault = (features) => {
@@ -119,7 +128,9 @@ const setInitialFormState = () => {
 setInitialFormState();
 
 const checkCapacity = (roomNumber) => {
-  checkValideCapacity(capacitySelect, CapacityValue.NOT_FOR_GUESTS, roomNumber, RoomsValue.NOT_FOR_GUESTS);
+  const { roomsValue, capacityValue } = roomsProperties;
+
+  checkValideCapacity(capacitySelect, capacityValue.notForGuests, roomNumber, roomsValue.notForGuests);
   capacitySelect.reportValidity();
 };
 
@@ -137,6 +148,7 @@ promoTitleInput.addEventListener('invalid', () => {
 
 promoTitleInput.addEventListener('input', () => {
   const titleLength = promoTitleInput.value.length;
+
   checkValideTitle(promoTitleInput, titleLength);
   promoTitleInput.reportValidity();
 });
@@ -153,13 +165,18 @@ promoPriceInput.addEventListener('input', () => {
 const setSuccessState = () => {
   const SUCCESS_MESSAGE_ID = 'success';
   const SUCCESS_MESSAGE_CONTENT = 'success';
+
   showMessage(createMessage(SUCCESS_MESSAGE_ID, SUCCESS_MESSAGE_CONTENT));
+  setInitialFormState();
+  setInitialFilterState();
+  setInitialMapState();
 };
 
 const setErrorState = () => {
   const ERROR_MESSAGE_ID = 'error';
   const ERROR_MESSAGE_CONTENT = 'error';
   const ERROR_BUTTON = 'error__button';
+
   showMessage(createMessage(ERROR_MESSAGE_ID, ERROR_MESSAGE_CONTENT), ERROR_BUTTON);
 };
 
@@ -172,6 +189,7 @@ const sendPromoForm = (onSuccess, onError) => {
       formData,
     );
   };
+
   return setState;
 };
 

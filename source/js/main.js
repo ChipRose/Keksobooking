@@ -1,7 +1,3 @@
-import './api.js';
-import './filter-form.js';
-import './form.js';
-import './map.js';
 import './images-preview.js';
 
 import './../css/style.css';
@@ -26,5 +22,5 @@ getData(
   () => showAllertMessage(createErrorMessage),
 );
 
-setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState), setInitialFormState, setInitialFilterState, setInitialMapState);
+setPromoFormSubmit(sendPromoForm(setSuccessState, setErrorState));
 clearForm(setInitialFormState, setInitialFilterState, setInitialMapState);
