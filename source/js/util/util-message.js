@@ -1,6 +1,6 @@
-import { setInitialFormState } from "../form";
-import { setInitialFilterState } from "../filter-form";
-import { setInitialMapState } from "../map";
+import { setInitialFormState } from '../form.js';
+import { setInitialFilterState } from '../filter-form.js';
+import { setInitialMapState } from '../map.js';
 
 const ALERT_SHOW_TIME = 3000;
 
@@ -33,9 +33,9 @@ const showMessage = (template, buttonClose) => {
   });
 
   if (buttonClose) {
-    const button = elementTemplate.querySelector(`.${buttonClose}`);
+    const button = template.querySelector(`.${buttonClose}`);
     button.addEventListener('click', () => {
-      body.removeChild(template);;
+      body.removeChild(template);
     })
   }
 };
