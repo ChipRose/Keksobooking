@@ -22,6 +22,14 @@ const PriceRange = {
   },
 };
 
+const RankValue = {
+  TYPE: 4,
+  PRICE: 3,
+  ROOMS: 2,
+  GUESTS: 1,
+  FEATURES: 1,
+};
+
 const mapFilterForm = document.querySelector('.map__filters');
 const mapFilters = mapFilterForm.querySelectorAll('.map__filter');
 const objectFeaturesFilter = mapFilterForm.querySelector('.map__features');
@@ -39,21 +47,21 @@ const compareCallBack = () => {
     const checkedFeatures = objectFeaturesFilter.querySelectorAll('.map__checkbox:checked');
 
     if (offer.type === objectTypeFilter) {
-      rank += 4;
+      rank += RankValue.TYPE;
     }
     if (offer.price >= PriceRange[objectPriceFilter].MIN && offer.price <= PriceRange[objectPriceFilter].MAX) {
-      rank += 3;
+      rank += RankValue.PRICE;
     }
     if (offer.rooms === objectRoomsFilter) {
-      rank += 2;
+      rank += RankValue.ROOMS;
     }
     if (offer.guests === objectCapacityFilter) {
-      rank += 1;
+      rank += RankValue.GUESTS;
     }
     if (offer.features) {
       checkedFeatures.forEach((feature) => {
         if (offer.features.includes(feature.value)) {
-          rank += 1;
+          rank += RankValue.FEATURES;
         }
       });
     }
@@ -64,6 +72,7 @@ const compareCallBack = () => {
   const comparePromos = (promoA, promoB) => {
     const rankA = getPromoRank(promoA);
     const rankB = getPromoRank(promoB);
+
     return rankB - rankA;
   };
 
