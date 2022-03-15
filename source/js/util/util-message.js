@@ -22,12 +22,12 @@ const showMessage = (template, buttonClose) => {
   body.appendChild(template);
 
   template.addEventListener('click', () => {
-    body.removeChild(template);
+    template.remove();
   })
 
   document.addEventListener('keydown', (evt) => {
     if (isEscape(evt)) {
-      body.removeChild(template);
+      template.remove();
       document.removeEventListener('keydown', (evt));
     }
   });
@@ -35,7 +35,7 @@ const showMessage = (template, buttonClose) => {
   if (buttonClose) {
     const button = template.querySelector(`.${buttonClose}`);
     button.addEventListener('click', () => {
-      body.removeChild(template);
+      template.remove();
     })
   }
 };
