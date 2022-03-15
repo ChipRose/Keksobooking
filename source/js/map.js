@@ -24,7 +24,7 @@ const MarkerSizes = {
 };
 
 const mapCanvas = document.querySelector('#map-canvas');
-mapCanvas.innerHTML = "<div id='map-inner' style='width: 100%; height: 100%;'></div>";
+mapCanvas.innerHTML = '<div id="map-inner" style="width: 100%; height: 100%;"></div>';
 
 setInactiveOfferFormState();
 setInactiveFilterState();
